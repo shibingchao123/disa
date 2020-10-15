@@ -95,9 +95,6 @@ html, body {
 }
 #content {
     position: absolute;
-    /* top: 50%;
-    left: 50%;
-    margin: -260px 0 0 -260px; */
     width: 504px;  
     height: 504px;
     border-style: solid;
@@ -123,8 +120,8 @@ html, body {
 }
 
 #canvas {
-    width: 390px;
-    height: 390px;
+    width: 350px;
+    height: 350px;
 }
 
 table {
@@ -252,19 +249,7 @@ table {
     background-color: #4a89dc;
 }
 
-.score {
-    width: 128px;
-    height: 128px;
-    margin: 5px 0 0 5px;
-    background-color: #5d9cec;
-    border-radius: 128px;
-    position: absolute;
-    z-index: 1;
-    text-align: center;
-    line-height: 128px;
-    font-size: 30px;
-    color: #fff;
-}
+
 
 .button {
     background: transparent;

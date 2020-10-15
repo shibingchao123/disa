@@ -160,6 +160,7 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
                     }
             }
         if (mode) return num;
+       
     } else {
         var orl_vertical_rows = new Array();
         var orl_vertical_cols = new Array();
@@ -294,7 +295,11 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
         timer_blast = setInterval(function () {
             if (time > 0) {
                 is_blast_time = true;
+                
                 for (var k = 0; k < array_cols.length; k++) {
+                    // ctx.clearRect(array_cols[k] * BLOCK_WIDTH - 2, array_rows[k] * BLOCK_WIDTH - 2, BLOCK_HEIGHT + 5, BLOCK_WIDTH + 5);
+                    // off = parseInt(BLOCK_WIDTH * 0.5 * (1 - time));
+                    // shape(block[array_rows[k]][array_cols[k]], 1 / time * (array_cols[k] * BLOCK_WIDTH + off), 1 / time * (array_rows[k] * BLOCK_WIDTH + off), time);
                     ctx.clearRect(array_cols[k] * BLOCK_WIDTH - 2, array_rows[k] * BLOCK_WIDTH - 2, BLOCK_HEIGHT + 5, BLOCK_WIDTH + 5);
                     off = parseInt(BLOCK_WIDTH * 0.5 * (1 - time));
                     shape(block[array_rows[k]][array_cols[k]], 1 / time * (array_cols[k] * BLOCK_WIDTH + off), 1 / time * (array_rows[k] * BLOCK_WIDTH + off), time);
@@ -463,6 +468,7 @@ function drop() {
         list[i] = new Array();
         is_drop_block[i] = new Array();
     }
+
     for (var i = 0; i < BLOCK_ROWS; i++) {
         for (var j = 0; j < BLOCK_COLS; j++) {
             need[i][j] = 0;
@@ -476,6 +482,7 @@ function drop() {
         line_times[i] = 0;
         list_need[i] = 0;
     }
+
 
     //初始化下落方块数据
     var max_drop = 0;
@@ -531,7 +538,6 @@ function drop() {
             j++;
         }
     }
-
     timer_drop = setInterval(function () {
         is_drop_time = true;
         if (max_drop > 0) {
@@ -687,7 +693,6 @@ function add_score(n) {
 function shape(type, x, y, scale) {
     ctx.globalCompositeOperation = "source-over";
 
-
     var img = new Image();
     img.src = "svg/" + imgname[type - 1] + ".png";
     if (img.complete) {
@@ -820,6 +825,7 @@ function gameover(score, all_sum, one_sum, type) {
         btn: "再来一局",
         closeBtn: 0,
         yes: function () {
+            ALLTIME = 600;
             restart();
             layer.closeAll();
         }
@@ -991,27 +997,9 @@ function timerial() {
 }
 
 function starttime() {
-
-    if (myalpha == 0) {
-        mybeta += 360 / ALLTIME;
-    } else {
-        mybeta += myalpha;
-        myalpha = 0;
-    }
-
-    if (mybeta < 180) {
-        $(".pie1").css("-o-transform", "rotate(" + mybeta + "deg)");
-        $(".pie1").css("-moz-transform", "rotate(" + mybeta + "deg)");
-        $(".pie1").css("-webkit-transform", "rotate(" + mybeta + "deg)");
-    } else {
-        
-        $(".pie2").css("backgroundColor", "#4a89dc");
-        $(".pie2").css("-o-transform", "rotate(" + mybeta + "deg)");
-        $(".pie2").css("-moz-transform", "rotate(" + mybeta + "deg)");
-        $(".pie2").css("-webkit-transform", "rotate(" + mybeta + "deg)");
-    }
-
-    if (mybeta >= 360) {
+    ALLTIME-=10;
+    $(".innter_time").html(ALLTIME/10+'s');
+    if (ALLTIME/10== 0) {
         mybeta = 0;
         clearInterval(t1);
         is_time = false;
@@ -1045,7 +1033,7 @@ function cleartime() {
 
 function countDown() {
     cleartime();
-    t1 = setInterval("starttime()", 100);
+    t1 = setInterval("starttime()", 1000);
     is_time = true;
 }
 
