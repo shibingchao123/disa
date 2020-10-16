@@ -12,16 +12,6 @@ html, body {
     -webkit-user-select: none;
     -webkit-text-size-adjust: none;
 }
-/* .border_outline{
-    width:590px;
-    height:550px;
-    top: 50%;
-    left: 50%;
-    margin: -300px 0 0 -300px;
-    position:relative;
-    background:url('../png/map_nprder.png') no-repeat;
-    background-size: contain;
-} */
 .all_bg{
     width:100%;
     height:100vh;
@@ -45,7 +35,7 @@ html, body {
     align-items: center;
 }
 .top_function_center{
-    width:320px;
+    width:300px;
     height:150rem;
     display: flex;
     flex-direction: column;
@@ -90,8 +80,8 @@ html, body {
 }
 .gamearea_border{
     position: absolute;
-    width:375px;
-    height:406px;
+    width:350px;
+    height:350px;
 }
 #content {
     position: absolute;
@@ -111,17 +101,17 @@ html, body {
 
 
 #game {
-    width: 350px;
-    height: 350px;
+    width: 320px;
+    height: 320px;
     left:10px;
     top:20px;
-    background:green;
+    background:url('../png/bg_40.png');
     /* float: left; */
 }
 
 #canvas {
-    width: 350px;
-    height: 350px;
+    width: 320px;
+    height: 320px;
 }
 
 table {

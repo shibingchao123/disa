@@ -19,8 +19,8 @@ var y;
 var BLOCK_ROWS = 8; // 每行每列8个方块
 var BLOCK_COLS = 8;
 var BLOCK_TYPE = 6; // 方块的种类，共有7种
-var BLOCK_WIDTH = 43.75; // 每个格子的宽
-var BLOCK_HEIGHT = 43.75; // 每个格子的高
+var BLOCK_WIDTH = 40; // 每个格子的宽
+var BLOCK_HEIGHT = 40; // 每个格子的高
 var MOVE_PIXEL = 10; // 每单位时间移动的像素
 var DROP_PIXEL = 10; // 每单位时间下落的像素
 var MOVE_TIME = 20; // 方块移动的单位时间
@@ -275,7 +275,6 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
     }
 
     add_score(array_rows.length);
-
     if (num == 0) {
         move(obj_rows, obj_cols, orl_rows, orl_cols, false);
     } else { // 消除宝石
@@ -300,8 +299,8 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
                     // ctx.clearRect(array_cols[k] * BLOCK_WIDTH - 2, array_rows[k] * BLOCK_WIDTH - 2, BLOCK_HEIGHT + 5, BLOCK_WIDTH + 5);
                     // off = parseInt(BLOCK_WIDTH * 0.5 * (1 - time));
                     // shape(block[array_rows[k]][array_cols[k]], 1 / time * (array_cols[k] * BLOCK_WIDTH + off), 1 / time * (array_rows[k] * BLOCK_WIDTH + off), time);
-                    ctx.clearRect(array_cols[k] * BLOCK_WIDTH - 2, array_rows[k] * BLOCK_WIDTH - 2, BLOCK_HEIGHT + 5, BLOCK_WIDTH + 5);
-                    off = parseInt(BLOCK_WIDTH * 0.5 * (1 - time));
+                    ctx.clearRect(array_cols[k] * BLOCK_WIDTH - 3, array_rows[k] * BLOCK_WIDTH , BLOCK_HEIGHT + 6, BLOCK_WIDTH + 6);
+                    off =  parseInt(BLOCK_WIDTH * 0.5 * (1 - time)) ;
                     shape(block[array_rows[k]][array_cols[k]], 1 / time * (array_cols[k] * BLOCK_WIDTH + off), 1 / time * (array_rows[k] * BLOCK_WIDTH + off), time);
                 }
                 if (!change && (time < 1.15)) {
@@ -311,7 +310,7 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
                     time -= 0.1;
                 }
             } else {
-                //再清除一次图形，手机上会有无法消除的问题  依然无法解决
+                //再清除一次图形，手机上会有无法消除的问题
                 for (var k = 0; k < array_cols.length; k++) {
                     ctx.clearRect(array_cols[k] * BLOCK_WIDTH - 2, array_rows[k] * BLOCK_WIDTH - 2, BLOCK_HEIGHT + 5, BLOCK_WIDTH + 5);
                 }
@@ -322,7 +321,7 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
                     block[array_rows[m]][array_cols[m]] = 0;
                     ctx.clearRect(array_cols[m] * BLOCK_WIDTH, array_rows[m] * BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH);
                 }
-                drop();
+                 drop();
             }
         },
             BLAST_TIME);
@@ -559,7 +558,9 @@ function drop() {
                             is_line_draw[j] = 1;
                             if (is_do[i][j] < list_need[j]) is_do[i][j] += DROP_PIXEL;
                             for (var k = 0; k < parseInt(list_max[j] / BLOCK_WIDTH); k++)
-                                if (list[j][k] > 0) shape(list[j][k], j * BLOCK_WIDTH, is_do[i][j] - (k + 1) * BLOCK_WIDTH, 1);
+                                if (list[j][k] > 0){
+                                    shape(list[j][k], j * BLOCK_WIDTH, is_do[i][j] - (k + 1) * BLOCK_WIDTH, 1)
+                                } 
                         }
             max_drop -= DROP_PIXEL;
         } else {
@@ -692,7 +693,6 @@ function add_score(n) {
 
 function shape(type, x, y, scale) {
     ctx.globalCompositeOperation = "source-over";
-
     var img = new Image();
     img.src = "svg/" + imgname[type - 1] + ".png";
     if (img.complete) {
@@ -780,27 +780,24 @@ function set_focus(mode, rows, cols) {
     }
     ctx.lineWidth = 2;
 
-    // ctx.shadowBlur = 0;
-    // ctx.shadowOffsetX = 0;
-    // ctx.shadowOffsetY = 0;
 
     ctx.beginPath();
     ctx.moveTo(this_x + 1, this_y + 15);
     ctx.lineTo(this_x + 1, this_y + 1);
     ctx.moveTo(this_x + 0, this_y + 1);
     ctx.lineTo(this_x + 15, this_y + 1);
-    ctx.moveTo(this_x + 28.75, this_y + 1);
-    ctx.lineTo(this_x + 42.75, this_y + 1);
-    ctx.moveTo(this_x + 42.75, this_y + 0);
-    ctx.lineTo(this_x + 42.75, this_y + 15);
-    ctx.moveTo(this_x + 42.75, this_y + 28.75);
-    ctx.lineTo(this_x + 42.75, this_y + 43.75);
-    ctx.moveTo(this_x + 43.75, this_y + 43.75);
-    ctx.lineTo(this_x + 28.75, this_y + 43.75);
-    ctx.moveTo(this_x + 15, this_y + 42.75);
-    ctx.lineTo(this_x + 0, this_y + 42.75);
-    ctx.moveTo(this_x + 1, this_y + 43.75);
-    ctx.lineTo(this_x + 1, this_y + 28.75);
+    ctx.moveTo(this_x + 25, this_y + 1);
+    ctx.lineTo(this_x + 39, this_y + 1);
+    ctx.moveTo(this_x + 39, this_y + 0);
+    ctx.lineTo(this_x + 39, this_y + 15);
+    ctx.moveTo(this_x + 39, this_y + 25);
+    ctx.lineTo(this_x + 39, this_y + 39);
+    ctx.moveTo(this_x + 39, this_y + 39);
+    ctx.lineTo(this_x + 25, this_y + 39);
+    ctx.moveTo(this_x + 15, this_y + 39);
+    ctx.lineTo(this_x + 1, this_y + 39);
+    ctx.moveTo(this_x + 1, this_y + 39);
+    ctx.lineTo(this_x + 1, this_y + 25);
 
     ctx.stroke();
 }
