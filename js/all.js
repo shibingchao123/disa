@@ -9,6 +9,8 @@ var ALLTIME = 600;
 var t1 = -1;
 
 var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];
+var allKindScore = [{name:"disinfectant",value:0,type:1},{name:"gloves",value:0,type:2},{name:"plastic",value:0,type:3},{name:"Syringe",value:0,type:4},{name:"mask",value:0,type:5},{name:"soap",value:0,type:6}];
+
 
 var c = document.getElementById("canvas");
 var ctx = c.getContext("2d");
@@ -27,6 +29,7 @@ var MOVE_TIME = 20; // 方块移动的单位时间
 var BLAST_TIME = 20; // 方块消除单位时间
 var DROP_TIME = 10; // 方块下落单位时间
 var TYPE = 0;
+var CHECK_TYPE = null; //当前选中的类型
 
 
 var is_move_time = false; // 当前是否有方块正在移动
@@ -110,7 +113,6 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
     var num = 0;
     var array_rows = new Array(); //待消除列表
     var array_cols = new Array();
-
     if (obj_type == -1) { // 参数全为-1则为全图检测
         var vertical_rows = new Array();
         var vertical_cols = new Array();
@@ -127,9 +129,16 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
 
                 i = 0;
                 while (block[k][l + i] == type) {
+
+                   
                     flat_rows[i] = k;
                     flat_cols[i] = l + i;
                     i++;
+                    // if(i>=3 && !mode ){
+                    //     allKindScore =  allKindScore.map(item =>{
+                    //       return item.type == type ?  {...item,value:item.value+i} : item
+                    //     })
+                    // }
                 }
 
                 i = 0;
@@ -137,6 +146,11 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
                     vertical_rows[i] = k + i;
                     vertical_cols[i] = l;
                     i++;
+                    // if(i>=3 && !mode ){
+                    //     allKindScore =  allKindScore.map(item =>{
+                    //         return item.type == type ?  {...item,value:item.value+i} : item
+                    //     })
+                    // }
                 }
 
                 check_repeat(flat_rows, flat_cols, vertical_rows, vertical_cols);
@@ -170,7 +184,6 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
         var obj_vertical_cols = new Array();
         var obj_flat_rows = new Array();
         var obj_flat_cols = new Array();
-
         while (true) {
             if (block[orl_rows][orl_cols + i] == orl_type) {
                 orl_flat_rows[j] = orl_rows;
@@ -189,6 +202,7 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
         j = 0;
         turn = false;
         while (true) { //上下
+          
             if (block[orl_rows + i][orl_cols] == orl_type) {
                 orl_vertical_rows[j] = orl_rows + i;
                 orl_vertical_cols[j] = orl_cols;
@@ -239,6 +253,7 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
         // 去掉重复的坐标
         check_repeat(orl_flat_rows, orl_flat_cols, orl_vertical_rows, orl_vertical_cols);
         check_repeat(obj_flat_rows, obj_flat_cols, obj_vertical_rows, obj_vertical_cols);
+        var needType = null;
         if (orl_flat_rows.length >= 3)
             for (var k = 0; k < orl_flat_rows.length; k++) {
                 if (orl_flat_rows[k] != -1) {
@@ -273,20 +288,22 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
             }
         if (mode) return num;
     }
-
-    add_score(array_rows.length);
+    if(array_rows.length>=3){
+        add_score(array_rows.length,array_rows[0]);
+    }
+   
     if (num == 0) {
         move(obj_rows, obj_cols, orl_rows, orl_cols, false);
-    } else { // 消除宝石
+    } else { 
         //if(is_music) {
         var hit = document.getElementById("hit");
         hit.load();
         hit.play();
         //}
         if (TYPE == 1) {
-            if (array_rows.length == 3) addtime(ALLTIME / 30); //2s
-            else if (array_rows.length == 4) addtime(ALLTIME / 12); //5s
-            else if (array_rows.length >= 5) addtime(ALLTIME / 6); //10s
+            // if (array_rows.length == 3) addtime(ALLTIME / 30); //2s
+            // else if (array_rows.length == 4) addtime(ALLTIME / 12); //5s
+            // else if (array_rows.length >= 5) addtime(ALLTIME / 6); //10s
         }
 
         var time = 1;
@@ -296,10 +313,7 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
                 is_blast_time = true;
                 
                 for (var k = 0; k < array_cols.length; k++) {
-                    // ctx.clearRect(array_cols[k] * BLOCK_WIDTH - 2, array_rows[k] * BLOCK_WIDTH - 2, BLOCK_HEIGHT + 5, BLOCK_WIDTH + 5);
-                    // off = parseInt(BLOCK_WIDTH * 0.5 * (1 - time));
-                    // shape(block[array_rows[k]][array_cols[k]], 1 / time * (array_cols[k] * BLOCK_WIDTH + off), 1 / time * (array_rows[k] * BLOCK_WIDTH + off), time);
-                    ctx.clearRect(array_cols[k] * BLOCK_WIDTH - 3, array_rows[k] * BLOCK_WIDTH , BLOCK_HEIGHT + 6, BLOCK_WIDTH + 6);
+                    ctx.clearRect(array_cols[k] * BLOCK_WIDTH - 2, array_rows[k] * BLOCK_WIDTH - 2, BLOCK_HEIGHT + 5, BLOCK_WIDTH + 5);
                     off =  parseInt(BLOCK_WIDTH * 0.5 * (1 - time)) ;
                     shape(block[array_rows[k]][array_cols[k]], 1 / time * (array_cols[k] * BLOCK_WIDTH + off), 1 / time * (array_rows[k] * BLOCK_WIDTH + off), time);
                 }
@@ -318,6 +332,9 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
                 is_blast_time = false;
                 clearInterval(timer_blast);
                 for (var m = 0; m < array_rows.length; m++) {
+                    allKindScore =  allKindScore.map(item =>{
+                        return item.type == block[array_rows[m]][array_cols[m]] ?  {...item,value:item.value+1} : item
+                    })
                     block[array_rows[m]][array_cols[m]] = 0;
                     ctx.clearRect(array_cols[m] * BLOCK_WIDTH, array_rows[m] * BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH);
                 }
@@ -369,7 +386,6 @@ function move(obj_rows, obj_cols, orl_rows, orl_cols, check) {
     rows2 = obj_rows * BLOCK_WIDTH;
     orl_type = block[orl_rows][orl_cols];
     obj_type = block[obj_rows][obj_cols];
-
     if (obj_rows == orl_rows) { // 横向交换
         if (obj_cols > orl_cols) { //向右换
             timer = setInterval(function () {
@@ -589,7 +605,7 @@ function drop() {
                         }
                     }
                 }
-            check_blast(-1, -1, -1, -1, -1, -1, false);
+             check_blast(-1, -1, -1, -1, -1, -1, false);
             check_over();
         }
     },
@@ -679,15 +695,15 @@ function check_over() {
     }
 }
 
-function add_score(n) {
-
-    if (n == 3) SCORE += 300;
-    else if (n == 4) SCORE += 500;
-    else SCORE += 200 * n;
-
+function add_score(n,b_type) {
+    // if (n == 3) SCORE += 300;
+    // else if (n == 4) SCORE += 500;
+    // else SCORE += 200 * n;
+    if(n>=3){
+        SCORE += 100 * n;
+    }
     if (n > ONE_SUM) ONE_SUM = n;
     ALL_SUM += n;
-
     $(".score").html(SCORE);
 }
 
@@ -818,7 +834,7 @@ function gameover(score, all_sum, one_sum, type) {
     layer.open({
         title: '游戏结束',
         shift: 3,
-        content: "" + info + "！<br>您在本局游戏中共获得: " + score + " 分<br>总共消除: " + all_sum + " 个宝石<br>单次最多消除: " + one_sum + " 个宝石",
+        content: "" + info + "！<br>您在本局游戏中共获得: " + score + " 分<br>总共消除: " + all_sum + " 个方块<br>单次最多消除: " + one_sum + " 个方块",
         btn: "再来一局",
         closeBtn: 0,
         yes: function () {
@@ -1032,6 +1048,11 @@ function countDown() {
     cleartime();
     t1 = setInterval("starttime()", 1000);
     is_time = true;
+}
+
+
+function selectGuan(time,score,condition){
+
 }
 
 

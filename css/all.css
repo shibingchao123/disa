@@ -61,6 +61,33 @@ html, body {
     justify-content: space-between;
     align-items: center;
 }
+.top_function_center_bottom{
+    width:100%;
+    height:43px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.top_function_center_bottom_center{
+    width:222.5px;
+    height:43px;
+    position: relative;
+}
+.top_function_center_bottom_condition_area{
+    width:120px;
+    height:43px;
+    float: left;
+    position: absolute;
+    left:50px;
+    background:purple;
+}
+.top_function_center_bottom_center_img{
+    position: absolute;
+    left:0;
+    top:0;
+    width:222.5px;
+    height:43px;
+}
 .middle_game_area{
     position: absolute;
     left:0;
