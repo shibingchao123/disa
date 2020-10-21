@@ -22,17 +22,23 @@
      <div  class='all_bg' >
        <!-- 背景图开始 -->
       <img src="./png/game_bg.jpg"   class='all_img' >
+      <img src="./png/pass4.png"  class='game_pass_img' >
+      <div  class='next_pass_button_area' >
+         <img src="./png/next_btn.png"   onclick="start(ALLTIME)"  class='next_pass_button'  >
+         <img src="./png/re_start.png"   onclick="beginFromOne()"  class='restart_game_button'  >
+      </div>
+     
       <!-- 背景图结束 -->
       <!-- 顶部功能区开始 -->
       <div class="top_function_area" >
         <div class='top_function_center' >
           <div  class='top_function_center_top' >
               <div  class='top_function_time' >
-                <div  onclick="javascript:timerial();" >时间</div>
-                <div class='time_right innter_time' >60s</div>
+                <div>时间</div>
+                <div class='time_right innter_time' ></div>
               </div>
               <div  class='top_function_score' >
-                <div id='sssss'> 分数</div>
+                <div id='sssss'    > 分数</div>
                 <div class='time_right score' >0</div>
               </div>
           </div>
@@ -40,7 +46,8 @@
               <div  class='top_function_center_bottom_center' >
                 <img src="./png/condition_pic.png"  class='top_function_center_bottom_center_img' >
                 <div class='top_function_center_bottom_condition_area' >
-
+                    <img class='top_function_center_bottom_condition_icon'  src="./svg/mask.png" >
+                    <div class='top_function_center_bottom_condition_text'  >x7</div>
                 </div>
               </div>
           </div>
@@ -78,6 +85,7 @@
 
 <script type="text/javascript" src="js/all.js"></script>  
 <script>
+    $(".innter_time").html(ALLTIME/10+'s');
       setHTMLFontSize();
       window.onresize = function(){
             setHTMLFontSize();
@@ -92,9 +100,7 @@
             document.documentElement.style.fontSize = rate * 1 + "px";
         }
 
-        document.getElementById("sssss").onclick = function(){
-          console.log(allKindScore)
-        }
+
 
 
 

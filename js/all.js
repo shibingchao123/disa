@@ -5,11 +5,35 @@ var tipindex = 0;
 //时间
 var mybeta = 0;
 var myalpha = 0;
-var ALLTIME = 600;
 var t1 = -1;
-
+var passnumber = 1;
+var nowpass = 'Checkpoint1';
 var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];
-var allKindScore = [{name:"disinfectant",value:0,type:1},{name:"gloves",value:0,type:2},{name:"plastic",value:0,type:3},{name:"Syringe",value:0,type:4},{name:"mask",value:0,type:5},{name:"soap",value:0,type:6}];
+// var nowFilters = {
+//     Checkpoint1:{condition:[{name:"mask",value:7,type:5}],time:300},
+//     Checkpoint2:{condition:[{name:"soap",value:15,type:6}],time:300},
+//     Checkpoint3:{condition:[{name:"gloves",value:25,type:2}],time:400},
+//     Checkpoint4:{condition:[{name:"mask",value:40,type:5}],time:500},
+//     Checkpoint5:{condition:[{name:"mask",value:15,type:5},{name:"soap",value:25,type:6}],time:600},
+//     Checkpoint6:{condition:[{name:"disinfectant",value:20,type:1},{name:"plastic",value:30,type:3}],time:600}
+// };
+var nowFilters = {
+    Checkpoint1:{condition:[{name:"mask",value:1,type:5}],time:150},
+    Checkpoint2:{condition:[{name:"soap",value:1,type:6}],time:200},
+    Checkpoint3:{condition:[{name:"gloves",value:1,type:2}],time:250},
+    Checkpoint4:{condition:[{name:"mask",value:1,type:5}],time:300},
+    Checkpoint5:{condition:[{name:"mask",value:1,type:5},{name:"soap",value:1,type:6}],time:400},
+    Checkpoint6:{condition:[{name:"disinfectant",value:1,type:1},{name:"plastic",value:1,type:3}],time:400}
+};
+var ALLTIME = nowFilters.Checkpoint1.time;
+var allKindScore = [
+    {name:"disinfectant",value:0,type:1},
+    {name:"gloves",value:0,type:2},
+    {name:"plastic",value:0,type:3},
+    {name:"Syringe",value:0,type:4},
+    {name:"mask",value:0,type:5},
+    {name:"soap",value:0,type:6}
+];
 
 
 var c = document.getElementById("canvas");
@@ -65,16 +89,34 @@ for (var i = -3; i < BLOCK_ROWS + 3; i++) {
         block[i][j] = -1;
     }
 }
-window.onload = start();
+ window.onload = timerial(ALLTIME);
 
+
+
+function hidePassBg(){
+    $('.game_pass_img').css('display','none');
+    $('.next_pass_button_area').css('z-index',8);
+    $('.next_pass_button').css('display','none');
+    $('.restart_game_button').css('display','none');
+}
 //document.onkeydown = key_down;
 //document.onkeyup = key_up;
-function start() {
-    tip = [];
-    tipindex = 0;
-    SCORE = 0;
-    ALL_SUM = 0;
-    ONE_SUM = 0;
+function start(passtime) {
+    hidePassBg();
+    // tip = [];
+    // tipindex = 0;
+    // SCORE = 0;
+    // ALL_SUM = 0;
+    // ONE_SUM = 0;
+    ALLTIME = passtime;
+    allKindScore = [
+        {name:"disinfectant",value:0,type:1},
+        {name:"gloves",value:0,type:2},
+        {name:"plastic",value:0,type:3},
+        {name:"Syringe",value:0,type:4},
+        {name:"mask",value:0,type:5},
+        {name:"soap",value:0,type:6}
+    ];
     ctx.clearRect(0, 0, BLOCK_WIDTH * BLOCK_COLS, BLOCK_HEIGHT * BLOCK_ROWS);
     for (var i = 0; i < BLOCK_ROWS; i++) {
         for (var j = 0; j < BLOCK_COLS; j++) {
@@ -83,7 +125,7 @@ function start() {
         }
     }
     if (check_blast(-1, -1, -1, -1, -1, -1, true)) {
-        start();
+        start(ALLTIME);
     } else {
         for (var i = 0; i < BLOCK_ROWS; i++) {
             for (var j = 0; j < BLOCK_COLS; j++) {
@@ -104,6 +146,56 @@ function start() {
 
     $(".score").html(SCORE);
 }
+
+
+
+function beginFromOne(){
+    hidePassBg();
+    ALLTIME = nowFilters.Checkpoint1.time;
+    SCORE = 0;
+    passnumber = 1;
+    nowpass = 'Checkpoint1';
+    allKindScore = [
+        {name:"disinfectant",value:0,type:1},
+        {name:"gloves",value:0,type:2},
+        {name:"plastic",value:0,type:3},
+        {name:"Syringe",value:0,type:4},
+        {name:"mask",value:0,type:5},
+        {name:"soap",value:0,type:6}
+    ];
+    ctx.clearRect(0, 0, BLOCK_WIDTH * BLOCK_COLS, BLOCK_HEIGHT * BLOCK_ROWS);
+    for (var i = 0; i < BLOCK_ROWS; i++) {
+        for (var j = 0; j < BLOCK_COLS; j++) {
+            rand = parseInt(Math.random() * BLOCK_TYPE) + 1;
+            block[i][j] = rand;
+        }
+    }
+    if (check_blast(-1, -1, -1, -1, -1, -1, true)) {
+        start(ALLTIME);
+    } else {
+        for (var i = 0; i < BLOCK_ROWS; i++) {
+            for (var j = 0; j < BLOCK_COLS; j++) {
+                shape(block[i][j], j * BLOCK_WIDTH, i * BLOCK_WIDTH, 1);
+            }
+        }
+    }
+
+    if (is_restart) {
+        if (t1 != -1) {
+            cleartime();
+            clearInterval(t1);
+            is_time = false;
+        }
+        is_restart = false;
+    }
+    if (!is_time && TYPE == 1) countDown();
+
+    $(".score").html(SCORE);
+}
+
+
+
+
 
 function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type, mode) { // mode如果为true 那么返回可以消除方块的数量，否则直接执行消除，用于初始化地图做判断
     if (is_blast_time) return false;
@@ -818,31 +910,68 @@ function set_focus(mode, rows, cols) {
     ctx.stroke();
 }
 
-function gameover(score, all_sum, one_sum, type) {
-    var over = document.getElementById("over");
-    over.load();
-    over.play();
 
-    var count = parseInt(localStorage.getItem("count")) + 1;
-    localStorage.setItem("count", count);
-    localStorage.setItem(count, "" + score + "," + (new Date()).valueOf());
-    var info = type == 0 ? "无法移动" : "时间结束";
+
+
+function gameover(score, all_sum, one_sum, type) {
+    // var over = document.getElementById("over");
+    // over.load();
+    // over.play();
+
+    // var count = parseInt(localStorage.getItem("count")) + 1;
+    // localStorage.setItem("count", count);
+    // localStorage.setItem(count, "" + score + "," + (new Date()).valueOf());
+    // var info = type == 0 ? "无法移动" : "时间结束";
+    hidePassBg();
+    var nowfilter = nowFilters[nowpass].condition;
+    console.log(nowfilter)
     if (TYPE == 1 && type == 0 && t1 != -1) {
         clearInterval(t1);
         is_time = false;
     }
-    layer.open({
-        title: '游戏结束',
-        shift: 3,
-        content: "" + info + "！<br>您在本局游戏中共获得: " + score + " 分<br>总共消除: " + all_sum + " 个方块<br>单次最多消除: " + one_sum + " 个方块",
-        btn: "再来一局",
-        closeBtn: 0,
-        yes: function () {
-            ALLTIME = 600;
-            restart();
-            layer.closeAll();
+    var compareArr = []
+    for(var a= 0;a<nowfilter.length;a++){
+        compareArr.push(allKindScore.map(item =>{
+           return item.name == nowfilter[a].name ? {...item,expect:nowfilter[a].value}  : {name:'needcancel'}
+        }))
+    }
+    for(var b = 0;b<compareArr.length;b++){
+        compareArr[b] = compareArr[b].filter(item =>{
+            return item.name != 'needcancel'
+        })
+    }
+    var compareResult = compareArr.map(item =>{
+        return item[0].value - item[0].expect
+    })
+    function check(number) {
+        return number >= 0;
+    }
+    var whtherPass = compareResult.every(check)
+    if(whtherPass){
+        if(passnumber<=5){
+            var needimg = './png/pass'+passnumber+'.png';
+            $('.game_pass_img').attr("src", needimg);
+            $('.game_pass_img').css('display','block');
+            $('.next_pass_button_area').css('z-index',12);
+            $('.next_pass_button').css('display','block');
+            passnumber+=1;
+            nowpass = 'Checkpoint'+passnumber;
+            var nextPassTime = nowFilters[nowpass].time;
+            ALLTIME = nextPassTime;
+            console.log('next',ALLTIME)
+        }else{
+         
         }
-    });
+    }else{
+        var needimg = './png/pass_fail.png';
+        $('.game_pass_img').attr("src", needimg);
+        $('.game_pass_img').css('display','block');
+        $('.next_pass_button_area').css('z-index',12);
+        $('.restart_game_button').css('display','block');
+    }
+
+    
+
 };
 
 function music() {
@@ -936,7 +1065,7 @@ function restart() {
     if (is_move_time || is_blast_time || is_drop_time) return false;
     is_restart = true;
     is_tips = false;
-    start();
+    start(ALLTIME);
 }
 
 function sleep(obj, iMinSecond) {
@@ -1003,16 +1132,18 @@ function normal() {
     restart();
 }
 
-function timerial() {
+function timerial(ttt) {
     if (is_move_time || is_blast_time || is_drop_time) return false;
     TYPE = 1;
-    restart();
+    start(ttt);
 }
 
 function starttime() {
-    ALLTIME-=10;
+    if(ALLTIME-10>=0){
+        ALLTIME-=10;
+    }
     $(".innter_time").html(ALLTIME/10+'s');
-    if (ALLTIME/10== 0) {
+    if (ALLTIME/10<= 0) {
         mybeta = 0;
         clearInterval(t1);
         is_time = false;
