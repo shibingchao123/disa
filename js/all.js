@@ -11,12 +11,12 @@ var nowpass = 'Checkpoint1';
 var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];
 // var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap",'virus'];
 var nowFilters = {
-    Checkpoint1:{condition:[{name:"mask",value:6,type:5}],time:300},
-    Checkpoint2:{condition:[{name:"soap",value:7,type:6}],time:300},
-    Checkpoint3:{condition:[{name:"gloves",value:9,type:2}],time:400},
-    Checkpoint4:{condition:[{name:"mask",value:10,type:5}],time:500},
-    Checkpoint5:{condition:[{name:"mask",value:7,type:5},{name:"soap",value:3,type:6}],time:600},
-    Checkpoint6:{condition:[{name:"disinfectant",value:6,type:1},{name:"plastic",value:10,type:3}],time:600}
+    Checkpoint1:{condition:[{name:"mask",value:3,type:5}],time:250},
+    Checkpoint2:{condition:[{name:"soap",value:4,type:6}],time:300},
+    Checkpoint3:{condition:[{name:"gloves",value:6,type:2}],time:300},
+    Checkpoint4:{condition:[{name:"Syringe",value:7,type:4}],time:500},
+    Checkpoint5:{condition:[{name:"mask",value:6,type:5},{name:"soap",value:3,type:6}],time:600},
+    Checkpoint6:{condition:[{name:"disinfectant",value:6,type:1},{name:"plastic",value:6,type:3}],time:600}
 };
 // var nowFilters = {
 //     Checkpoint1:{condition:[{name:"mask",value:1,type:5}],time:150},
@@ -181,6 +181,7 @@ function beginFromOne(){
     SCORE = 0;
     passnumber = 1;
     nowpass = 'Checkpoint1';
+    renderCondition();
     allKindScore = [
         {name:"disinfectant",value:0,type:1},
         {name:"gloves",value:0,type:2},
@@ -354,7 +355,7 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
         i = 0;
         j = 0;
         turn = false;
-        while (true) {
+        while (true) { 
             if (block[obj_rows + i][obj_cols] == obj_type) {
                 obj_vertical_rows[j] = obj_rows + i;
                 obj_vertical_cols[j] = obj_cols;
@@ -814,12 +815,12 @@ function check_over() {
 }
 
 function add_score(n,b_type) {
-    // if (n == 3) SCORE += 300;
-    // else if (n == 4) SCORE += 500;
-    // else SCORE += 200 * n;
-    if(n>=3){
-        SCORE += 100 * n;
-    }
+    if (n == 3) SCORE += 300;
+    else if (n == 4) SCORE += 500;
+    else SCORE += 200 * n;
+    // if(n>=3){
+    //     SCORE += 100 * n;
+    // }
     if (n > ONE_SUM) ONE_SUM = n;
     ALL_SUM += n;
     $(".score").html(SCORE);
@@ -1228,7 +1229,6 @@ function hideIndex(){
     var imgdefereds=[];
     jQuery('img').each(function(){
         var dfd=jQuery.Deferred();
-        console.log(dfd,111)
         $(this).bind('load',function(){
             dfd.resolve();
         }).bind('error',function(){
