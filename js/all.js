@@ -9,6 +9,7 @@ var t1 = -1;
 var passnumber = 1;
 var nowpass = 'Checkpoint1';
 var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];
+// var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap",'virus'];
 // var nowFilters = {
 //     Checkpoint1:{condition:[{name:"mask",value:7,type:5}],time:300},
 //     Checkpoint2:{condition:[{name:"soap",value:15,type:6}],time:300},
@@ -98,11 +99,13 @@ function hidePassBg(){
     $('.next_pass_button_area').css('z-index',8);
     $('.next_pass_button').css('display','none');
     $('.restart_game_button').css('display','none');
+    $('.towin_game_button').css('display','none');
 }
 //document.onkeydown = key_down;
 //document.onkeyup = key_up;
 function start(passtime) {
     hidePassBg();
+    renderCondition();
     // tip = [];
     // tipindex = 0;
     // SCORE = 0;
@@ -147,7 +150,30 @@ function start(passtime) {
     $(".score").html(SCORE);
 }
 
-
+function renderCondition() {
+    nowpass1 = 'Checkpoint'+passnumber;
+    var nowfilter1 = nowFilters[nowpass1].condition;
+    if(nowfilter1.length<=1){
+        var fimg1  = "svg/" + nowfilter1[0].name + ".png";
+        var fvalue1 = 'x'+nowfilter1[0].value;
+        $('.top_function_center_bottom_condition_icon').attr("src", fimg1);
+        $(".top_function_center_bottom_condition_text").html(fvalue1);
+        $('.top_function_center_bottom_condition_area2').css('opacity',0);
+        $('.top_function_center_bottom_condition_area').css('opacity',1);
+    }else{
+        var fimg2  = "svg/" + nowfilter1[0].name + ".png";
+        var fimg3  = "svg/" + nowfilter1[1].name + ".png";
+        var fvalue2 = 'x'+nowfilter1[0].value;
+        var fvalue3 = 'x'+nowfilter1[1].value;
+        $('.top_function_center_bottom_condition_icon2').attr("src", fimg2);
+        $(".top_function_center_bottom_condition_text2").html(fvalue2);
+        $('.top_function_center_bottom_condition_icon3').attr("src", fimg3);
+        $(".top_function_center_bottom_condition_text3").html(fvalue3);
+        $('.top_function_center_bottom_condition_area').css('opacity',0);
+        $('.top_function_center_bottom_condition_area2').css('opacity',1);
+    }
+    
+}
 
 function beginFromOne(){
     hidePassBg();
@@ -924,7 +950,6 @@ function gameover(score, all_sum, one_sum, type) {
     // var info = type == 0 ? "无法移动" : "时间结束";
     hidePassBg();
     var nowfilter = nowFilters[nowpass].condition;
-    console.log(nowfilter)
     if (TYPE == 1 && type == 0 && t1 != -1) {
         clearInterval(t1);
         is_time = false;
@@ -948,7 +973,7 @@ function gameover(score, all_sum, one_sum, type) {
     }
     var whtherPass = compareResult.every(check)
     if(whtherPass){
-        if(passnumber<=5){
+        if(passnumber<=Object.keys(nowFilters).length-1){
             var needimg = './png/pass'+passnumber+'.png';
             $('.game_pass_img').attr("src", needimg);
             $('.game_pass_img').css('display','block');
@@ -958,9 +983,12 @@ function gameover(score, all_sum, one_sum, type) {
             nowpass = 'Checkpoint'+passnumber;
             var nextPassTime = nowFilters[nowpass].time;
             ALLTIME = nextPassTime;
-            console.log('next',ALLTIME)
         }else{
-         
+            var needimg = './png/success.png';
+            $('.game_pass_img').attr("src", needimg);
+            $('.game_pass_img').css('display','block');
+            $('.next_pass_button_area').css('z-index',12);
+            $('.towin_game_button').css('display','block');
         }
     }else{
         var needimg = './png/pass_fail.png';
@@ -973,6 +1001,10 @@ function gameover(score, all_sum, one_sum, type) {
     
 
 };
+
+function toWin(){
+    window.location = 'http:www.baidu.com'
+}
 
 function music() {
     var bgm = document.getElementById("bgm");
