@@ -1,15 +1,13 @@
 //提示
 var tip = [];
 var tipindex = 0;
-
 //时间
 var mybeta = 0;
 var myalpha = 0;
 var t1 = -1;
-var passnumber = 1;
-var nowpass = 'Checkpoint1';
-var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];
-// var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap",'virus'];
+var passnumber = 1; //第几关
+var nowpass = 'Checkpoint1';  //关卡名字
+var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];  //方块集合
 var nowFilters = {
     Checkpoint1:{condition:[{name:"mask",value:3,type:5}],time:250},
     Checkpoint2:{condition:[{name:"soap",value:4,type:6}],time:300},
@@ -17,16 +15,9 @@ var nowFilters = {
     Checkpoint4:{condition:[{name:"Syringe",value:7,type:4}],time:500},
     Checkpoint5:{condition:[{name:"mask",value:6,type:5},{name:"soap",value:3,type:6}],time:600},
     Checkpoint6:{condition:[{name:"disinfectant",value:6,type:1},{name:"plastic",value:6,type:3}],time:600}
-};
-// var nowFilters = {
-//     Checkpoint1:{condition:[{name:"mask",value:1,type:5}],time:150},
-//     Checkpoint2:{condition:[{name:"soap",value:1,type:6}],time:200},
-//     Checkpoint3:{condition:[{name:"gloves",value:1,type:2}],time:250},
-//     Checkpoint4:{condition:[{name:"mask",value:1,type:5}],time:300},
-//     Checkpoint5:{condition:[{name:"mask",value:1,type:5},{name:"soap",value:1,type:6}],time:400},
-//     Checkpoint6:{condition:[{name:"disinfectant",value:1,type:1},{name:"plastic",value:1,type:3}],time:400}
-// };
+}; //闯关条件以及关数
 var ALLTIME = nowFilters.Checkpoint1.time;
+
 var allKindScore = [
     {name:"disinfectant",value:0,type:1},
     {name:"gloves",value:0,type:2},
@@ -34,18 +25,16 @@ var allKindScore = [
     {name:"Syringe",value:0,type:4},
     {name:"mask",value:0,type:5},
     {name:"soap",value:0,type:6}
-];
-
+];  //当前关卡各种方块消除成绩的记录
 
 var c = document.getElementById("canvas");
 var ctx = c.getContext("2d");
-
 var x; //鼠标当前移动到的位置
 var y;
 
 var BLOCK_ROWS = 8; // 每行每列8个方块
 var BLOCK_COLS = 8;
-var BLOCK_TYPE = 6; // 方块的种类，共有7种
+var BLOCK_TYPE = 6; // 方块的种类
 var BLOCK_WIDTH = 40; // 每个格子的宽
 var BLOCK_HEIGHT = 40; // 每个格子的高
 var MOVE_PIXEL = 10; // 每单位时间移动的像素
@@ -90,7 +79,7 @@ for (var i = -3; i < BLOCK_ROWS + 3; i++) {
         block[i][j] = -1;
     }
 }
-//  window.onload = timerial(ALLTIME);
+
 
 
 
@@ -101,8 +90,6 @@ function hidePassBg(){
     $('.restart_game_button').css('display','none');
     $('.towin_game_button').css('display','none');
 }
-//document.onkeydown = key_down;
-//document.onkeyup = key_up;
 function start(passtime) {
     hidePassBg();
     renderCondition();
@@ -248,16 +235,9 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
 
                 i = 0;
                 while (block[k][l + i] == type) {
-
-                   
                     flat_rows[i] = k;
                     flat_cols[i] = l + i;
                     i++;
-                    // if(i>=3 && !mode ){
-                    //     allKindScore =  allKindScore.map(item =>{
-                    //       return item.type == type ?  {...item,value:item.value+i} : item
-                    //     })
-                    // }
                 }
 
                 i = 0;
@@ -265,11 +245,6 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
                     vertical_rows[i] = k + i;
                     vertical_cols[i] = l;
                     i++;
-                    // if(i>=3 && !mode ){
-                    //     allKindScore =  allKindScore.map(item =>{
-                    //         return item.type == type ?  {...item,value:item.value+i} : item
-                    //     })
-                    // }
                 }
 
                 check_repeat(flat_rows, flat_cols, vertical_rows, vertical_cols);
@@ -443,7 +418,7 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
                     time -= 0.1;
                 }
             } else {
-                //再清除一次图形，手机上会有无法消除的问题
+                //再清除一次图形
                 for (var k = 0; k < array_cols.length; k++) {
                     ctx.clearRect(array_cols[k] * BLOCK_WIDTH - 2, array_rows[k] * BLOCK_WIDTH - 2, BLOCK_HEIGHT + 5, BLOCK_WIDTH + 5);
                 }
@@ -914,8 +889,6 @@ function set_focus(mode, rows, cols) {
         ctx.globalCompositeOperation = "destination-out";
     }
     ctx.lineWidth = 2;
-
-
     ctx.beginPath();
     ctx.moveTo(this_x + 1, this_y + 15);
     ctx.lineTo(this_x + 1, this_y + 1);
@@ -933,7 +906,6 @@ function set_focus(mode, rows, cols) {
     ctx.lineTo(this_x + 1, this_y + 39);
     ctx.moveTo(this_x + 1, this_y + 39);
     ctx.lineTo(this_x + 1, this_y + 25);
-
     ctx.stroke();
 }
 
@@ -941,9 +913,9 @@ function set_focus(mode, rows, cols) {
 
 
 function gameover(score, all_sum, one_sum, type) {
-    // var over = document.getElementById("over");
-    // over.load();
-    // over.play();
+    var over = document.getElementById("over");
+    over.load();
+    over.play();
 
     // var count = parseInt(localStorage.getItem("count")) + 1;
     // localStorage.setItem("count", count);
@@ -1018,57 +990,57 @@ function music() {
     }
 };
 
-function rank() {
-    var count = parseInt(localStorage.getItem("count"));
-    var content = "<div style=\"overflow-y:scroll;width:100%;height:100%\">" + "<table class=\"bordered\"><thead><tr><th>排名</th><th>分数</th><th>时间</th></tr></thead>";
-    var data = new Array(count);
-    for (var i = 0; i < count; i++) {
-        data[i] = localStorage.getItem(i + 1).split(",");
-    }
-    data.sort(function (a, b) {
-        if (parseInt(a[0]) > parseInt(b[0]) || (parseInt(a[0]) == parseInt(b[0]) && a[1] <= b[1])) return -1;
-        else return 1;
-    });
-    for (var i = 0; i < count; i++) {
-        var score = data[i][0];
-        var time = date(data[i][1]);
-        content += "<tr><td>" + (i + 1) + "</td><td>" + score + "</td><td>" + time + "</td></tr>";
-    }
-    content += "</table></div>";
-    layer.open({
-        type: 1,
-        title: '排行榜',
-        shift: 3,
-        area: ["600px", "400px"],
-        content: content
-    });
-}
+// function rank() {
+//     var count = parseInt(localStorage.getItem("count"));
+//     var content = "<div style=\"overflow-y:scroll;width:100%;height:100%\">" + "<table class=\"bordered\"><thead><tr><th>排名</th><th>分数</th><th>时间</th></tr></thead>";
+//     var data = new Array(count);
+//     for (var i = 0; i < count; i++) {
+//         data[i] = localStorage.getItem(i + 1).split(",");
+//     }
+//     data.sort(function (a, b) {
+//         if (parseInt(a[0]) > parseInt(b[0]) || (parseInt(a[0]) == parseInt(b[0]) && a[1] <= b[1])) return -1;
+//         else return 1;
+//     });
+//     for (var i = 0; i < count; i++) {
+//         var score = data[i][0];
+//         var time = date(data[i][1]);
+//         content += "<tr><td>" + (i + 1) + "</td><td>" + score + "</td><td>" + time + "</td></tr>";
+//     }
+//     content += "</table></div>";
+//     layer.open({
+//         type: 1,
+//         title: '排行榜',
+//         shift: 3,
+//         area: ["600px", "400px"],
+//         content: content
+//     });
+// }
 
-function scorehistory() {
-    var count = parseInt(localStorage.getItem("count"));
-    var content = "<div style=\"overflow-y:scroll;width:100%;height:100%\">" + "<table class=\"bordered\"><thead><tr><th>分数</th><th>时间</th></tr></thead>";
-    var data = new Array(count);
-    for (var i = 0; i < count; i++) {
-        data[i] = localStorage.getItem(i + 1).split(",");
-    }
-    data.sort(function (a, b) {
-        if (a[1] >= b[1]) return -1;
-        else return 1;
-    });
-    for (var i = 0; i < count; i++) {
-        var score = data[i][0];
-        var time = date(data[i][1]);
-        content += "<tr><td>" + score + "</td><td>" + time + "</td></tr>";
-    }
-    content += "</table></div>";
-    layer.open({
-        type: 1,
-        title: '历史数据',
-        shift: 3,
-        area: ["600px", "400px"],
-        content: content
-    });
-}
+// function scorehistory() {
+//     var count = parseInt(localStorage.getItem("count"));
+//     var content = "<div style=\"overflow-y:scroll;width:100%;height:100%\">" + "<table class=\"bordered\"><thead><tr><th>分数</th><th>时间</th></tr></thead>";
+//     var data = new Array(count);
+//     for (var i = 0; i < count; i++) {
+//         data[i] = localStorage.getItem(i + 1).split(",");
+//     }
+//     data.sort(function (a, b) {
+//         if (a[1] >= b[1]) return -1;
+//         else return 1;
+//     });
+//     for (var i = 0; i < count; i++) {
+//         var score = data[i][0];
+//         var time = date(data[i][1]);
+//         content += "<tr><td>" + score + "</td><td>" + time + "</td></tr>";
+//     }
+//     content += "</table></div>";
+//     layer.open({
+//         type: 1,
+//         title: '历史数据',
+//         shift: 3,
+//         area: ["600px", "400px"],
+//         content: content
+//     });
+// }
 
 function date(time) {
     var d = new Date(parseInt(time));
@@ -1086,13 +1058,7 @@ function date(time) {
     return Y + "-" + M + "-" + D + " " + h + ":" + m + ":" + s;
 }
 
-function help() {
-    layer.open({
-        title: '帮助',
-        shift: 3,
-        content: '操作方法：<br>(1)点击一个方块之后再点击另一个方块<br>(2)拖拽某个方块<br><br>支持浏览器：<br>Google Chrome, Mozilla FireFox<br>推荐使用Google Chrome浏览器获得最佳体验<br><br>made by myluo',
-    });
-}
+
 
 function restart() {
     if (is_move_time || is_blast_time || is_drop_time) return false;
