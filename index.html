@@ -14,12 +14,22 @@
      <div class="shine"></div>新游戏
     </div>
     <div>  -->
-      <audio id="bgm" src="mp3/bgm.mp3" autoplay="autoplay" loop="loop"></audio> 
+      <audio id="bgm" src="mp3/bgm.mp3" ></audio> 
       <audio id="hit" src="mp3/hit.mp3"></audio> 
       <audio id="over" src="mp3/over.mp3"></audio> 
      </div> 
      <!-- 总背景区域开始 -->
      <div  class='all_bg' >
+       <!--  首页开始页面开始-->
+       <div  class='start_index' >
+          <img  class='start_index_img'  src="./png/index.png" >
+          <img src="./png/rule_tem.png"  class='black_rule_explain'   onclick="changeRuleShow(false)" >
+          <div  class='start_index_btn_area' >
+            <img src="./png/start_btn.png"  class='start_index_btn'    onclick='hideIndex()'  >
+            <img src="./png/game_rule_btn.png"     onclick="changeRuleShow(true)" class='start_index_btn' >
+          </div>
+       </div>
+       <!-- 首页开始页面结束 -->
        <!-- 背景图开始 -->
       <img src="./png/game_bg.jpg"   class='all_img' >
       <img src="./png/pass4.png"  class='game_pass_img' >
@@ -77,7 +87,8 @@
       <!-- 对对碰区域开始 -->
       <div  class='game_all_area' >
   <div id="game"> 
-    <canvas id="canvas" width="320px" height="320px" onmousedown="mouse_down(event)" onmouseup="mouse_up(event)" onmousemove="mouse_move(event)" onmouseout="mouse_touch_end()"> 
+    <canvas id="canvas" width="320px" height="320px" onmousedown="mouse_down(event)" onmouseup="mouse_up(event)"    onmousemove="mouse_move(event)" onmouseout="mouse_touch_end()"> 
+      <!-- <canvas id="canvas" width="320px" height="320px" touchstart="mouse_down(event)" touchend="mouse_up(event)" onmousemove="mouse_move(event)" onmouseout="mouse_touch_end()">  -->
     </canvas> 
    </div> 
     </div>

@@ -10,22 +10,22 @@ var passnumber = 1;
 var nowpass = 'Checkpoint1';
 var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];
 // var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap",'virus'];
-// var nowFilters = {
-//     Checkpoint1:{condition:[{name:"mask",value:7,type:5}],time:300},
-//     Checkpoint2:{condition:[{name:"soap",value:15,type:6}],time:300},
-//     Checkpoint3:{condition:[{name:"gloves",value:25,type:2}],time:400},
-//     Checkpoint4:{condition:[{name:"mask",value:40,type:5}],time:500},
-//     Checkpoint5:{condition:[{name:"mask",value:15,type:5},{name:"soap",value:25,type:6}],time:600},
-//     Checkpoint6:{condition:[{name:"disinfectant",value:20,type:1},{name:"plastic",value:30,type:3}],time:600}
-// };
 var nowFilters = {
-    Checkpoint1:{condition:[{name:"mask",value:1,type:5}],time:150},
-    Checkpoint2:{condition:[{name:"soap",value:1,type:6}],time:200},
-    Checkpoint3:{condition:[{name:"gloves",value:1,type:2}],time:250},
-    Checkpoint4:{condition:[{name:"mask",value:1,type:5}],time:300},
-    Checkpoint5:{condition:[{name:"mask",value:1,type:5},{name:"soap",value:1,type:6}],time:400},
-    Checkpoint6:{condition:[{name:"disinfectant",value:1,type:1},{name:"plastic",value:1,type:3}],time:400}
+    Checkpoint1:{condition:[{name:"mask",value:6,type:5}],time:300},
+    Checkpoint2:{condition:[{name:"soap",value:7,type:6}],time:300},
+    Checkpoint3:{condition:[{name:"gloves",value:9,type:2}],time:400},
+    Checkpoint4:{condition:[{name:"mask",value:10,type:5}],time:500},
+    Checkpoint5:{condition:[{name:"mask",value:7,type:5},{name:"soap",value:3,type:6}],time:600},
+    Checkpoint6:{condition:[{name:"disinfectant",value:6,type:1},{name:"plastic",value:10,type:3}],time:600}
 };
+// var nowFilters = {
+//     Checkpoint1:{condition:[{name:"mask",value:1,type:5}],time:150},
+//     Checkpoint2:{condition:[{name:"soap",value:1,type:6}],time:200},
+//     Checkpoint3:{condition:[{name:"gloves",value:1,type:2}],time:250},
+//     Checkpoint4:{condition:[{name:"mask",value:1,type:5}],time:300},
+//     Checkpoint5:{condition:[{name:"mask",value:1,type:5},{name:"soap",value:1,type:6}],time:400},
+//     Checkpoint6:{condition:[{name:"disinfectant",value:1,type:1},{name:"plastic",value:1,type:3}],time:400}
+// };
 var ALLTIME = nowFilters.Checkpoint1.time;
 var allKindScore = [
     {name:"disinfectant",value:0,type:1},
@@ -58,7 +58,7 @@ var CHECK_TYPE = null; //当前选中的类型
 
 
 var is_move_time = false; // 当前是否有方块正在移动
-var is_blast_time = false; // 当前是否有方块正在消除
+var is_blast_time = false; // 当前是否有方块正在消除 
 var is_drop_time = false; // 当前是否有方块正在下落
 var is_time = false;
 var is_restart = false;
@@ -90,7 +90,7 @@ for (var i = -3; i < BLOCK_ROWS + 3; i++) {
         block[i][j] = -1;
     }
 }
- window.onload = timerial(ALLTIME);
+//  window.onload = timerial(ALLTIME);
 
 
 
@@ -1003,7 +1003,7 @@ function gameover(score, all_sum, one_sum, type) {
 };
 
 function toWin(){
-    window.location = 'http:www.baidu.com'
+    window.location = 'https://www.wenjuan.com/s/UBBz6bV/'
 }
 
 function music() {
@@ -1214,9 +1214,40 @@ function countDown() {
 }
 
 
-function selectGuan(time,score,condition){
+function changeRuleShow(value){
+    value == true ? $('.black_rule_explain').css('display','block')  :  $('.black_rule_explain').css('display','none');
+}  
 
+
+function hideIndex(){
+    $('.start_index').css('display','none');
+    $('.start_index_img').css('display','none');
+    $('.sblack_rule_explain').css('display','none');
+    $('.start_index_btn_area').css('display','none');
+    $('.start_index_btn').css('display','none');
+    var imgdefereds=[];
+    jQuery('img').each(function(){
+        var dfd=jQuery.Deferred();
+        console.log(dfd,111)
+        $(this).bind('load',function(){
+            dfd.resolve();
+        }).bind('error',function(){
+            //图片加载错误，加入错误处理
+            // dfd.resolve();
+        });
+
+        if(this.complete) {
+            dfd.resolve();
+        }
+        imgdefereds.push(dfd);
+    })
+    jQuery.when.apply(null,imgdefereds).done(function(){
+        timerial(ALLTIME);
+    });
 }
+
+
+
 
 
 
