@@ -3,6 +3,8 @@ var tip = [];
 var tipindex = 0;
 //时间
 var mybeta = 0;
+var hit = document.getElementById("hit");
+    hit.load();
 var myalpha = 0;
 var t1 = -1;
 var passnumber = 1; //第几关
@@ -138,7 +140,7 @@ function start(passtime) {
 }
 
 function renderCondition() {
-    nowpass1 = 'Checkpoint'+passnumber;
+    var nowpass1 = 'Checkpoint'+passnumber;
     var nowfilter1 = nowFilters[nowpass1].condition;
     if(nowfilter1.length<=1){
         var fimg1  = "svg/" + nowfilter1[0].name + ".png";
@@ -390,8 +392,6 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
         move(obj_rows, obj_cols, orl_rows, orl_cols, false);
     } else { 
         //if(is_music) {
-        var hit = document.getElementById("hit");
-        hit.load();
         hit.play();
         //}
         if (TYPE == 1) {
@@ -913,9 +913,9 @@ function set_focus(mode, rows, cols) {
 
 
 function gameover(score, all_sum, one_sum, type) {
-    var over = document.getElementById("over");
-    over.load();
-    over.play();
+    // var over = document.getElementById("over");
+    // over.load();
+    // over.play();
 
     // var count = parseInt(localStorage.getItem("count")) + 1;
     // localStorage.setItem("count", count);
