@@ -34,10 +34,23 @@ html, body {
     left:0;
     top:0;
 }
+.pre_load{
+    width:100%;
+    z-index: 9999999;
+    height:100vh;
+    background: #eeeeee;
+    position: absolute;
+    left:0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top:0;
+}
 .start_index_img{
     width:100%;
     z-index: 99;
     height:100vh;
+    display: none;
     position: absolute;
     left:0;
     top:0;
@@ -63,7 +76,6 @@ html, body {
     position: absolute;
     left:0;
     top:0;
-    opacity: 0;
 }
 .game_pass_img{
     width:100%;
@@ -227,6 +239,10 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+#myDom{
+    opacity: 1;
+    z-index: 99999999999999999;
 }
 .gamearea_border{
     position: absolute;

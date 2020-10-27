@@ -3,20 +3,23 @@ var tip = [];
 var tipindex = 0;
 //时间
 var mybeta = 0;
-var hit = document.getElementById("hit");
-    hit.load();
 var myalpha = 0;
 var t1 = -1;
 var passnumber = 1; //第几关
 var nowpass = 'Checkpoint1';  //关卡名字
 var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];  //方块集合
+//var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap","virus"];  //方块集合
 var nowFilters = {
     Checkpoint1:{condition:[{name:"mask",value:3,type:5}],time:250},
     Checkpoint2:{condition:[{name:"soap",value:4,type:6}],time:300},
     Checkpoint3:{condition:[{name:"gloves",value:6,type:2}],time:300},
     Checkpoint4:{condition:[{name:"Syringe",value:7,type:4}],time:500},
     Checkpoint5:{condition:[{name:"mask",value:6,type:5},{name:"soap",value:3,type:6}],time:600},
-    Checkpoint6:{condition:[{name:"disinfectant",value:6,type:1},{name:"plastic",value:6,type:3}],time:600}
+    Checkpoint6:{condition:[{name:"disinfectant",value:6,type:1},{name:"plastic",value:6,type:3}],time:600},
+    Checkpoint7:{condition:[{name:"mask",value:7,type:5}],time:400},
+    Checkpoint8:{condition:[{name:"gloves",value:6,type:2},{name:"Syringe",value:3,type:4}],time:400},
+    Checkpoint9:{condition:[{name:"disinfectant",value:6,type:1},{name:"soap",value:3,type:6}],time:500},
+    Checkpoint10:{condition:[{name:"gloves",value:6,type:2},{name:"mask",value:6,type:5}],time:900},
 }; //闯关条件以及关数
 var ALLTIME = nowFilters.Checkpoint1.time;
 
@@ -26,7 +29,8 @@ var allKindScore = [
     {name:"plastic",value:0,type:3},
     {name:"Syringe",value:0,type:4},
     {name:"mask",value:0,type:5},
-    {name:"soap",value:0,type:6}
+    {name:"soap",value:0,type:6},
+    {name:"virus",value:0,type:7}
 ];  //当前关卡各种方块消除成绩的记录
 
 var c = document.getElementById("canvas");
@@ -101,13 +105,15 @@ function start(passtime) {
     // ALL_SUM = 0;
     // ONE_SUM = 0;
     ALLTIME = passtime;
+    
     allKindScore = [
         {name:"disinfectant",value:0,type:1},
         {name:"gloves",value:0,type:2},
         {name:"plastic",value:0,type:3},
         {name:"Syringe",value:0,type:4},
         {name:"mask",value:0,type:5},
-        {name:"soap",value:0,type:6}
+        {name:"soap",value:0,type:6},
+        {name:"virus",value:0,type:7}
     ];
     ctx.clearRect(0, 0, BLOCK_WIDTH * BLOCK_COLS, BLOCK_HEIGHT * BLOCK_ROWS);
     for (var i = 0; i < BLOCK_ROWS; i++) {
@@ -165,6 +171,8 @@ function renderCondition() {
 }
 
 function beginFromOne(){
+    imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];
+    BLOCK_TYPE = 6
     hidePassBg();
     ALLTIME = nowFilters.Checkpoint1.time;
     SCORE = 0;
@@ -384,9 +392,9 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
             }
         if (mode) return num;
     }
-    if(array_rows.length>=3){
-        add_score(array_rows.length,array_rows[0]);
-    }
+    // if(array_rows.length>=3){
+    //     add_score(array_rows.length,array_rows[0]);
+    // }
    
     if (num == 0) {
         move(obj_rows, obj_cols, orl_rows, orl_cols, false);
@@ -426,6 +434,9 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
                 is_blast_time = false;
                 clearInterval(timer_blast);
                 for (var m = 0; m < array_rows.length; m++) {
+                    if(block[array_rows[m]][array_cols[m]] != 7){
+                        add_score2(1)
+                    }
                     allKindScore =  allKindScore.map(item =>{
                         return item.type == block[array_rows[m]][array_cols[m]] ?  {...item,value:item.value+1} : item
                     })
@@ -789,7 +800,7 @@ function check_over() {
     }
 }
 
-function add_score(n,b_type) {
+function add_score(n) {
     if (n == 3) SCORE += 300;
     else if (n == 4) SCORE += 500;
     else SCORE += 200 * n;
@@ -801,10 +812,18 @@ function add_score(n,b_type) {
     $(".score").html(SCORE);
 }
 
+
+function add_score2(n) {
+    SCORE += 100 * n;
+    $(".score").html(SCORE);
+}
+
 function shape(type, x, y, scale) {
     ctx.globalCompositeOperation = "source-over";
     var img = new Image();
     img.src = "svg/" + imgname[type - 1] + ".png";
+    var fakeBLOCK_WIDTH = 2*BLOCK_WIDTH;
+    var fakeBLOCK_HEIGHT = 2*BLOCK_HEIGHT;
     if (img.complete) {
         ctx.drawImage(img, x * scale, y * scale, BLOCK_WIDTH * scale, BLOCK_HEIGHT * scale);
     } else {
@@ -946,6 +965,12 @@ function gameover(score, all_sum, one_sum, type) {
     }
     var whtherPass = compareResult.every(check)
     if(whtherPass){
+        var ssnumber = passnumber+1;
+        var sss = './png/pass'+ssnumber+'.png'
+        preloadTheImg(sss)
+        if(ssnumber == 10){
+             preloadTheImg('./png/success.png');
+         }
         if(passnumber<=Object.keys(nowFilters).length-1){
             var needimg = './png/pass'+passnumber+'.png';
             $('.game_pass_img').attr("src", needimg);
@@ -953,6 +978,10 @@ function gameover(score, all_sum, one_sum, type) {
             $('.next_pass_button_area').css('z-index',12);
             $('.next_pass_button').css('display','block');
             passnumber+=1;
+            if(passnumber>=7){
+                imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap","virus"];  //方块集合
+                BLOCK_TYPE = 7
+            }
             nowpass = 'Checkpoint'+passnumber;
             var nextPassTime = nowFilters[nowpass].time;
             ALLTIME = nextPassTime;
@@ -1186,30 +1215,102 @@ function changeRuleShow(value){
 }  
 
 
+window.onload = function () {
+   var  imageObj = new Image(); 
+   $(".innter_time").html(ALLTIME/10+'s');
+    imageObj.src = './png/index.png';
+    imageObj.onload = function(){
+        $('.pre_load').css('display','none');
+        $('.start_index_img').css('display','block');
+    }
+    preloadTheImg('./png/pass1.png');
+    preloadTheImg('./png/pass_fail.png');
+    getShare()
+
+}
+
+function preloadTheImg(src){
+    var preimg = new Image();
+        preimg.src = src;
+        preimg.onload = function(){
+                
+     }
+}
+
+function getShare(){
+    $.ajax({
+        url: 'http://sss.hemajia.net/ddp/share/getShareData',
+        type: "post",
+        data:  {url:'http://sss.hemajia.net/duiduipeng/index.html'},
+        dataType: "json",
+        success: function (res) {
+             var timestamp = res.data.timestamp;
+             var nonceStr = res.data.nonceStr;
+             var signature = res.data.signature;
+               wx.config({
+          debug: false,
+          appId: 'wxd380519f6d1d8516',
+          timestamp: timestamp,
+          nonceStr: nonceStr,
+          signature: signature,
+          jsApiList: [
+          'onMenuShareAppMessage',  //旧的接口，即将废弃
+          'onMenuShareTimeline', //旧的接口，即将废弃
+        'updateAppMessageShareData',
+        'updateTimelineShareData'
+
+      ]// 必填，需要使用的JS接口列表
+      });
+                    wx.ready(function () {
+              
+              var  shareUrl = 'http://sss.hemajia.net/duiduipeng/index.html'
+               var iconImg =  'http://duiduipeng.oss-cn-beijing.aliyuncs.com/e4ce20bdb9f87573b0598fbb1e864e5.png'
+               var iconText = '健康对对碰';
+                  wx.onMenuShareAppMessage({
+
+                  title: '健康对对碰', // 分享标题
+
+                  desc: '对对碰闯关成功可以抽取红包~', // 分享描述
+
+                  link: shareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+
+                  imgUrl: iconImg, // 分享图标
+
+                  type: '', // 分享类型,music、video或link，不填默认为link
+
+                  dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+
+                  success: function () {
+
+                  // 用户点击了分享后执行的回调函数
+
+                  }
+
+                  });
+                  wx.onMenuShareTimeline({
+                      title: '健康对对碰', // 分享标题
+                      link: shareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                      imgUrl: iconImg, // 分享图标
+                      success: function () {
+                      // 用户点击了分享后执行的回调函数
+                      }
+                  });
+          });
+
+
+        }
+    })
+}
+
+
+
+
 function hideIndex(){
     $('.start_index').css('display','none');
-    $('.start_index_img').css('display','none');
     $('.sblack_rule_explain').css('display','none');
     $('.start_index_btn_area').css('display','none');
     $('.start_index_btn').css('display','none');
-    var imgdefereds=[];
-    jQuery('img').each(function(){
-        var dfd=jQuery.Deferred();
-        $(this).bind('load',function(){
-            dfd.resolve();
-        }).bind('error',function(){
-            //图片加载错误，加入错误处理
-            // dfd.resolve();
-        });
-
-        if(this.complete) {
-            dfd.resolve();
-        }
-        imgdefereds.push(dfd);
-    })
-    jQuery.when.apply(null,imgdefereds).done(function(){
-        timerial(ALLTIME);
-    });
+    timerial(ALLTIME);
 }
 
 
