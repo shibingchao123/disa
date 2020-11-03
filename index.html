@@ -34,11 +34,20 @@
        <!-- 背景图开始 -->
       <img src="./png/game_bg.jpg"   class='all_img' >
       <img src="./png/pass4.png"  class='game_pass_img' >
+      <div class='game_pass_img_rank' >
+          <img src="./png/rank_bg.png"    onclick='hideRank()' class='game_pass_img_rank_img' >
+      </div>
+    
       <div  class='next_pass_button_area' >
          <img src="./png/next_btn.png"   onclick="start(ALLTIME)"  class='next_pass_button'  >
          <img src="./png/re_start.png"   onclick="beginFromOne()"  class='restart_game_button'  >
-         <img src="./png/lottery.png"   onclick="toWin()"  class='towin_game_button'  >
+         <!-- <img src="./png/lottery.png"   onclick="toWin()"  class='towin_game_button'  > -->
       </div>
+      <div  class='next_pass_button_area_success' >
+        <img src="./png/lottery.png"   onclick="toWin()"  class='towin_game_button'  >
+        <img src="./png/rank_pic.png"   onclick="toRank()"  class='towin_game_button'  >
+     </div>
+
      
       <!-- 背景图结束 -->
       <!-- 顶部功能区开始 -->
@@ -103,5 +112,25 @@
 <script src='http://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
 <script type="text/javascript" src="js/all.js"></script>  
 <script>
-
+  //getCode()
+  // saveScore()
+  // getRank()
+  wx.config({
+            // 配置信息, 即使不正确也能使用 wx.ready
+            debug: false,
+            appId: '',
+            timestamp: 1,
+            nonceStr: '',
+            signature: '',
+            jsApiList: []
+        });
+        wx.ready(function() {
+        var globalAudio=document.getElementById("bgm");
+        setTimeout(function(){
+           globalAudio.play();
+            document.addEventListener("WeixinJSBridgeReady", function () { 
+               globalAudio.play();
+            }, false); 
+        },10)
+    });
 </script>

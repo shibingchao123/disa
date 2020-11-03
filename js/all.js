@@ -5,7 +5,8 @@ var tipindex = 0;
 var mybeta = 0;
 var myalpha = 0;
 var t1 = -1;
-var passnumber = 1; //第几关
+var hit =document.getElementById("hit");
+var passnumber = 10; //第几关
 var nowpass = 'Checkpoint1';  //关卡名字
 var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];  //方块集合
 //var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap","virus"];  //方块集合
@@ -19,7 +20,7 @@ var nowFilters = {
     Checkpoint7:{condition:[{name:"mask",value:7,type:5}],time:400},
     Checkpoint8:{condition:[{name:"gloves",value:6,type:2},{name:"Syringe",value:3,type:4}],time:400},
     Checkpoint9:{condition:[{name:"disinfectant",value:6,type:1},{name:"soap",value:3,type:6}],time:500},
-    Checkpoint10:{condition:[{name:"gloves",value:6,type:2},{name:"mask",value:6,type:5}],time:900},
+    Checkpoint10:{condition:[{name:"gloves",value:1,type:2},{name:"mask",value:1,type:5}],time:900},
 }; //闯关条件以及关数
 var ALLTIME = nowFilters.Checkpoint1.time;
 
@@ -73,6 +74,13 @@ var ALL_SUM = 0; // 累计消除方块数量
 var ONE_SUM = 0; // 单次最多消除方块数量
 var ADDITION = 1; // 分数加成权值
 var block; //用于保存每个方块的类型
+
+//个人信息
+var wxName = '';
+var wxAvatar = '';
+var userid = '0';
+var rankList = [];
+
 
 if (localStorage.getItem("count") == null) {
     localStorage.setItem("count", 0);
@@ -400,7 +408,21 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
         move(obj_rows, obj_cols, orl_rows, orl_cols, false);
     } else { 
         //if(is_music) {
-        hit.play();
+         hit.play();
+
+        // wx.ready(function() {
+        //     var globalAudio=document.getElementById("hit");
+        //     setTimeout(function(){
+        //        globalAudio.play();
+        //         document.addEventListener("WeixinJSBridgeReady", function () { 
+        //            globalAudio.play();
+        //         }, false); 
+        //     },10)
+
+
+
+
+        // });
         //}
         if (TYPE == 1) {
             // if (array_rows.length == 3) addtime(ALLTIME / 30); //2s
@@ -965,9 +987,12 @@ function gameover(score, all_sum, one_sum, type) {
     }
     var whtherPass = compareResult.every(check)
     if(whtherPass){
-        var ssnumber = passnumber+1;
+        var ssnumber = passnumber+1 ;
         var sss = './png/pass'+ssnumber+'.png'
-        preloadTheImg(sss)
+        if(ssnumber<11){
+             preloadTheImg(sss)
+        }
+       
         if(ssnumber == 10){
              preloadTheImg('./png/success.png');
          }
@@ -986,11 +1011,20 @@ function gameover(score, all_sum, one_sum, type) {
             var nextPassTime = nowFilters[nowpass].time;
             ALLTIME = nextPassTime;
         }else{
+            saveScore()
             var needimg = './png/success.png';
             $('.game_pass_img').attr("src", needimg);
             $('.game_pass_img').css('display','block');
-            $('.next_pass_button_area').css('z-index',12);
-            $('.towin_game_button').css('display','block');
+            $('.next_pass_button_area').css('display','none');
+            $('.next_pass_button_area_success').css('z-index',12);
+            $('.next_pass_button_area_success').css('display','block');
+            $('.next_pass_button_area_success').css('display','flex');
+            setTimeout(function(){
+                   $('.towin_game_button').css('display','block');
+            },15)
+        
+         
+
         }
     }else{
         var needimg = './png/pass_fail.png';
@@ -1008,15 +1042,136 @@ function toWin(){
     window.location = 'https://www.wenjuan.com/s/UBBz6bV/'
 }
 
-function music() {
-    var bgm = document.getElementById("bgm");
-    if (bgm.paused) {
-        bgm.play();
-        is_music = true;
+
+
+function toRank(){
+    $('.game_pass_img_rank').css('display','block');
+    $('.game_pass_img_rank').css('display','flex');
+    $('.game_pass_img_rank').css('justify-content','center');
+    $('.game_pass_img_rank').css('align-items','center');
+}
+
+function hideRank(){
+    $('.game_pass_img_rank').css('display','none');
+}
+
+
+
+function   getCode () { // 非静默授权，第一次有弹框
+    var code = ''
+    var local = window.location.href // 获取页面url
+    var appid = 'wxd380519f6d1d8516' 
+    code = getUrlCode().code // 截取code;
+    if (code == null || code === '') { // 如果没有code，则去请求
+        window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd380519f6d1d8516&redirect_uri=http://sss.hemajia.net/duiduipeng/index.html&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect`
     } else {
-        bgm.pause();
-        is_music = false;
+        // 处理code
+          localStorage.setItem('nowCode1',code);
+          console.log(typeof code,222222222222 )
+          var info ={
+            'code':code,
+        };
+          $.ajax({
+            url: 'http://192.168.3.11:8088/jk/user/oauth2',
+            type: "post",
+            contentType:'application/json',
+            data:  JSON.stringify(info),
+            dataType:'json',
+            success: function (res) {
+                wxName = res.data.nickname;
+                wxAvatar = res.data.headimgurl;
+                userid = res.data.userid
+            }
+        })
     }
+
+} 
+
+function    getUrlCode() { // 截取url中的code方法
+    var nnn = window.location.href;
+    //var nnn = 'http://sss.hemajia.net/duiduipeng/index.html?code=031cPn0005u2zK18wo100peLqE4cPn08&state=STATE';
+    var url =  nnn;
+    var winUrl = url
+    var theRequest = new Object()
+    if (url.indexOf("?") != -1) {
+        var str = url.substr(1)
+        var strs = str.split("&")
+        var newarr = [];
+        for(let j=0;j < strs.length; j ++){
+            if(strs[j].indexOf("?") != -1){
+               var index =  strs[j].lastIndexOf("?")
+                newarr.push(strs[j].substring(index + 1, strs[j].length))
+            }else{
+                newarr.push(strs[j])
+            }
+        }
+
+       
+        for(var i = 0; i < newarr.length; i ++) {
+            theRequest[newarr[i].split("=")[0]]=(newarr[i].split("=")[1])
+        }
+    }
+    return theRequest
+    
+}
+
+//获取排行榜
+function getRank(){
+    $.ajax({
+        url: 'http://192.168.3.11:8088/jk/user/list',
+        type: "post",
+        data:'{}',
+        contentType:'application/json',
+        success: function (res) {
+            rankList = res.data
+            console.log(rankList,11111)
+        }
+    })
+}
+
+
+
+//保存积分
+function saveScore(){
+    var info ={
+        "integral":JSON.stringify(SCORE),  //积分
+        "userid":userid    //用户id
+    };
+    $.ajax({
+        url: 'http://192.168.3.11:8088/jk/user/addByUserid',
+        type: "post",
+        data:JSON.stringify(info),
+        contentType:'application/json',
+        success: function (res) {
+          
+
+        }
+    })
+}
+
+
+
+function music() {
+    // wx.ready(function() {
+    //     var globalAudio=document.getElementById("bgm");
+    //     setTimeout(function(){
+    //        globalAudio.play();
+    //         document.addEventListener("WeixinJSBridgeReady", function () { 
+    //            globalAudio.play();
+    //         }, false); 
+    //     },10)
+
+
+
+
+    // });
+    // if (bgm.paused) {
+    //     bgm.play();
+    //     is_music = true;
+    // } else {
+    //     bgm.pause();
+    //     is_music = false;
+    // }
 };
 
 // function rank() {
