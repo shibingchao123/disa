@@ -6,7 +6,7 @@ var mybeta = 0;
 var myalpha = 0;
 var t1 = -1;
 var hit =document.getElementById("hit");
-var passnumber = 10; //第几关
+var passnumber = 1; //第几关
 var nowpass = 'Checkpoint1';  //关卡名字
 var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];  //方块集合
 //var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap","virus"];  //方块集合
@@ -20,7 +20,7 @@ var nowFilters = {
     Checkpoint7:{condition:[{name:"mask",value:7,type:5}],time:400},
     Checkpoint8:{condition:[{name:"gloves",value:6,type:2},{name:"Syringe",value:3,type:4}],time:400},
     Checkpoint9:{condition:[{name:"disinfectant",value:6,type:1},{name:"soap",value:3,type:6}],time:500},
-    Checkpoint10:{condition:[{name:"gloves",value:1,type:2},{name:"mask",value:1,type:5}],time:900},
+    Checkpoint10:{condition:[{name:"gloves",value:6,type:2},{name:"mask",value:6,type:5}],time:900},
 }; //闯关条件以及关数
 var ALLTIME = nowFilters.Checkpoint1.time;
 
@@ -1045,6 +1045,7 @@ function toWin(){
 
 
 function toRank(){
+    getRank()
     $('.game_pass_img_rank').css('display','block');
     $('.game_pass_img_rank').css('display','flex');
     $('.game_pass_img_rank').css('justify-content','center');
@@ -1124,7 +1125,15 @@ function getRank(){
         contentType:'application/json',
         success: function (res) {
             rankList = res.data
-            console.log(rankList,11111)
+            var topTen = rankList.slice(0,10);
+            for(let i= 0;i<topTen.length;i++){
+                var nowitem_avatar = '#rank_avatar'+(i+1);
+                var nowitem_name = '#rank_name'+(i+1);
+                var nowitem_score = '#rank_score'+(i+1);
+                $(nowitem_avatar).attr("src", topTen[i].headimgurl);
+                $(nowitem_name).html(topTen[i].nickname);
+                $(nowitem_score).html(topTen[i].integral);
+            }
         }
     })
 }
