@@ -5,33 +5,33 @@ var tipindex = 0;
 var mybeta = 0;
 var myalpha = 0;
 var t1 = -1;
-var hit =document.getElementById("hit");
+var hit = document.getElementById("hit");
 var passnumber = 1; //第几关
 var nowpass = 'Checkpoint1';  //关卡名字
-var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];  //方块集合
+var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];  //方块集合
 //var imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap","virus"];  //方块集合
 var nowFilters = {
-    Checkpoint1:{condition:[{name:"mask",value:3,type:5}],time:250},
-    Checkpoint2:{condition:[{name:"soap",value:4,type:6}],time:300},
-    Checkpoint3:{condition:[{name:"gloves",value:6,type:2}],time:300},
-    Checkpoint4:{condition:[{name:"Syringe",value:7,type:4}],time:500},
-    Checkpoint5:{condition:[{name:"mask",value:6,type:5},{name:"soap",value:3,type:6}],time:600},
-    Checkpoint6:{condition:[{name:"disinfectant",value:6,type:1},{name:"plastic",value:6,type:3}],time:600},
-    Checkpoint7:{condition:[{name:"mask",value:7,type:5}],time:400},
-    Checkpoint8:{condition:[{name:"gloves",value:6,type:2},{name:"Syringe",value:3,type:4}],time:400},
-    Checkpoint9:{condition:[{name:"disinfectant",value:6,type:1},{name:"soap",value:3,type:6}],time:500},
-    Checkpoint10:{condition:[{name:"gloves",value:6,type:2},{name:"mask",value:6,type:5}],time:900},
+    Checkpoint1: { condition: [{ name: "mask", value: 3, type: 5 }], time: 250 },
+    Checkpoint2: { condition: [{ name: "soap", value: 4, type: 6 }], time: 300 },
+    Checkpoint3: { condition: [{ name: "gloves", value: 6, type: 2 }], time: 300 },
+    Checkpoint4: { condition: [{ name: "Syringe", value: 7, type: 4 }], time: 500 },
+    Checkpoint5: { condition: [{ name: "mask", value: 6, type: 5 }, { name: "soap", value: 3, type: 6 }], time: 600 },
+    Checkpoint6: { condition: [{ name: "disinfectant", value: 6, type: 1 }, { name: "plastic", value: 6, type: 3 }], time: 600 },
+    Checkpoint7: { condition: [{ name: "mask", value: 7, type: 5 }], time: 600 },
+    Checkpoint8: { condition: [{ name: "gloves", value: 6, type: 2 }, { name: "Syringe", value: 3, type: 4 }], time: 400 },
+    Checkpoint9: { condition: [{ name: "disinfectant", value: 6, type: 1 }, { name: "soap", value: 3, type: 6 }], time: 500 },
+    Checkpoint10: { condition: [{ name: "gloves", value: 6, type: 2 }, { name: "mask", value: 6, type: 5 }], time: 900 },
 }; //闯关条件以及关数
 var ALLTIME = nowFilters.Checkpoint1.time;
 
 var allKindScore = [
-    {name:"disinfectant",value:0,type:1},
-    {name:"gloves",value:0,type:2},
-    {name:"plastic",value:0,type:3},
-    {name:"Syringe",value:0,type:4},
-    {name:"mask",value:0,type:5},
-    {name:"soap",value:0,type:6},
-    {name:"virus",value:0,type:7}
+    { name: "disinfectant", value: 0, type: 1 },
+    { name: "gloves", value: 0, type: 2 },
+    { name: "plastic", value: 0, type: 3 },
+    { name: "Syringe", value: 0, type: 4 },
+    { name: "mask", value: 0, type: 5 },
+    { name: "soap", value: 0, type: 6 },
+    { name: "virus", value: 0, type: 7 }
 ];  //当前关卡各种方块消除成绩的记录
 
 var c = document.getElementById("canvas");
@@ -97,12 +97,12 @@ for (var i = -3; i < BLOCK_ROWS + 3; i++) {
 
 
 
-function hidePassBg(){
-    $('.game_pass_img').css('display','none');
-    $('.next_pass_button_area').css('z-index',8);
-    $('.next_pass_button').css('display','none');
-    $('.restart_game_button').css('display','none');
-    $('.towin_game_button').css('display','none');
+function hidePassBg() {
+    $('.game_pass_img').css('display', 'none');
+    $('.next_pass_button_area').css('z-index', 8);
+    $('.next_pass_button').css('display', 'none');
+    $('.restart_game_button').css('display', 'none');
+    $('.towin_game_button').css('display', 'none');
 }
 function start(passtime) {
     hidePassBg();
@@ -113,15 +113,15 @@ function start(passtime) {
     // ALL_SUM = 0;
     // ONE_SUM = 0;
     ALLTIME = passtime;
-    
+
     allKindScore = [
-        {name:"disinfectant",value:0,type:1},
-        {name:"gloves",value:0,type:2},
-        {name:"plastic",value:0,type:3},
-        {name:"Syringe",value:0,type:4},
-        {name:"mask",value:0,type:5},
-        {name:"soap",value:0,type:6},
-        {name:"virus",value:0,type:7}
+        { name: "disinfectant", value: 0, type: 1 },
+        { name: "gloves", value: 0, type: 2 },
+        { name: "plastic", value: 0, type: 3 },
+        { name: "Syringe", value: 0, type: 4 },
+        { name: "mask", value: 0, type: 5 },
+        { name: "soap", value: 0, type: 6 },
+        { name: "virus", value: 0, type: 7 }
     ];
     ctx.clearRect(0, 0, BLOCK_WIDTH * BLOCK_COLS, BLOCK_HEIGHT * BLOCK_ROWS);
     for (var i = 0; i < BLOCK_ROWS; i++) {
@@ -154,32 +154,32 @@ function start(passtime) {
 }
 
 function renderCondition() {
-    var nowpass1 = 'Checkpoint'+passnumber;
+    var nowpass1 = 'Checkpoint' + passnumber;
     var nowfilter1 = nowFilters[nowpass1].condition;
-    if(nowfilter1.length<=1){
-        var fimg1  = "svg/" + nowfilter1[0].name + ".png";
-        var fvalue1 = 'x'+nowfilter1[0].value;
+    if (nowfilter1.length <= 1) {
+        var fimg1 = "svg/" + nowfilter1[0].name + ".png";
+        var fvalue1 = 'x' + nowfilter1[0].value;
         $('.top_function_center_bottom_condition_icon').attr("src", fimg1);
         $(".top_function_center_bottom_condition_text").html(fvalue1);
-        $('.top_function_center_bottom_condition_area2').css('opacity',0);
-        $('.top_function_center_bottom_condition_area').css('opacity',1);
-    }else{
-        var fimg2  = "svg/" + nowfilter1[0].name + ".png";
-        var fimg3  = "svg/" + nowfilter1[1].name + ".png";
-        var fvalue2 = 'x'+nowfilter1[0].value;
-        var fvalue3 = 'x'+nowfilter1[1].value;
+        $('.top_function_center_bottom_condition_area2').css('opacity', 0);
+        $('.top_function_center_bottom_condition_area').css('opacity', 1);
+    } else {
+        var fimg2 = "svg/" + nowfilter1[0].name + ".png";
+        var fimg3 = "svg/" + nowfilter1[1].name + ".png";
+        var fvalue2 = 'x' + nowfilter1[0].value;
+        var fvalue3 = 'x' + nowfilter1[1].value;
         $('.top_function_center_bottom_condition_icon2').attr("src", fimg2);
         $(".top_function_center_bottom_condition_text2").html(fvalue2);
         $('.top_function_center_bottom_condition_icon3').attr("src", fimg3);
         $(".top_function_center_bottom_condition_text3").html(fvalue3);
-        $('.top_function_center_bottom_condition_area').css('opacity',0);
-        $('.top_function_center_bottom_condition_area2').css('opacity',1);
+        $('.top_function_center_bottom_condition_area').css('opacity', 0);
+        $('.top_function_center_bottom_condition_area2').css('opacity', 1);
     }
-    
+
 }
 
-function beginFromOne(){
-    imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];
+function beginFromOne() {
+    imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];
     BLOCK_TYPE = 6
     hidePassBg();
     ALLTIME = nowFilters.Checkpoint1.time;
@@ -188,12 +188,12 @@ function beginFromOne(){
     nowpass = 'Checkpoint1';
     renderCondition();
     allKindScore = [
-        {name:"disinfectant",value:0,type:1},
-        {name:"gloves",value:0,type:2},
-        {name:"plastic",value:0,type:3},
-        {name:"Syringe",value:0,type:4},
-        {name:"mask",value:0,type:5},
-        {name:"soap",value:0,type:6}
+        { name: "disinfectant", value: 0, type: 1 },
+        { name: "gloves", value: 0, type: 2 },
+        { name: "plastic", value: 0, type: 3 },
+        { name: "Syringe", value: 0, type: 4 },
+        { name: "mask", value: 0, type: 5 },
+        { name: "soap", value: 0, type: 6 }
     ];
     ctx.clearRect(0, 0, BLOCK_WIDTH * BLOCK_COLS, BLOCK_HEIGHT * BLOCK_ROWS);
     for (var i = 0; i < BLOCK_ROWS; i++) {
@@ -286,7 +286,7 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
                     }
             }
         if (mode) return num;
-       
+
     } else {
         var orl_vertical_rows = new Array();
         var orl_vertical_cols = new Array();
@@ -314,7 +314,7 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
         j = 0;
         turn = false;
         while (true) { //上下
-          
+
             if (block[orl_rows + i][orl_cols] == orl_type) {
                 orl_vertical_rows[j] = orl_rows + i;
                 orl_vertical_cols[j] = orl_cols;
@@ -348,7 +348,7 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
         i = 0;
         j = 0;
         turn = false;
-        while (true) { 
+        while (true) {
             if (block[obj_rows + i][obj_cols] == obj_type) {
                 obj_vertical_rows[j] = obj_rows + i;
                 obj_vertical_cols[j] = obj_cols;
@@ -403,12 +403,12 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
     // if(array_rows.length>=3){
     //     add_score(array_rows.length,array_rows[0]);
     // }
-   
+
     if (num == 0) {
         move(obj_rows, obj_cols, orl_rows, orl_cols, false);
-    } else { 
+    } else {
         //if(is_music) {
-         hit.play();
+        hit.play();
 
         // wx.ready(function() {
         //     var globalAudio=document.getElementById("hit");
@@ -435,10 +435,10 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
         timer_blast = setInterval(function () {
             if (time > 0) {
                 is_blast_time = true;
-                
+
                 for (var k = 0; k < array_cols.length; k++) {
                     ctx.clearRect(array_cols[k] * BLOCK_WIDTH - 2, array_rows[k] * BLOCK_WIDTH - 2, BLOCK_HEIGHT + 5, BLOCK_WIDTH + 5);
-                    off =  parseInt(BLOCK_WIDTH * 0.5 * (1 - time)) ;
+                    off = parseInt(BLOCK_WIDTH * 0.5 * (1 - time));
                     shape(block[array_rows[k]][array_cols[k]], 1 / time * (array_cols[k] * BLOCK_WIDTH + off), 1 / time * (array_rows[k] * BLOCK_WIDTH + off), time);
                 }
                 if (!change && (time < 1.15)) {
@@ -456,16 +456,16 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
                 is_blast_time = false;
                 clearInterval(timer_blast);
                 for (var m = 0; m < array_rows.length; m++) {
-                    if(block[array_rows[m]][array_cols[m]] != 7){
+                    if (block[array_rows[m]][array_cols[m]] != 7) {
                         add_score2(1)
                     }
-                    allKindScore =  allKindScore.map(item =>{
-                        return item.type == block[array_rows[m]][array_cols[m]] ?  {...item,value:item.value+1} : item
+                    allKindScore = allKindScore.map(item => {
+                        return item.type == block[array_rows[m]][array_cols[m]] ? { ...item, value: item.value + 1 } : item
                     })
                     block[array_rows[m]][array_cols[m]] = 0;
                     ctx.clearRect(array_cols[m] * BLOCK_WIDTH, array_rows[m] * BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH);
                 }
-                 drop();
+                drop();
             }
         },
             BLAST_TIME);
@@ -502,7 +502,7 @@ function check_repeat(flat_rows, flat_cols, vertical_rows, vertical_cols) {
 }
 
 function move(obj_rows, obj_cols, orl_rows, orl_cols, check) {
-    if(obj_rows<0 || obj_rows >7 || obj_cols<0 || obj_cols >7 ||  orl_rows<0 || orl_rows >7 ||  orl_cols<0 || orl_cols >7 ){
+    if (obj_rows < 0 || obj_rows > 7 || obj_cols < 0 || obj_cols > 7 || orl_rows < 0 || orl_rows > 7 || orl_cols < 0 || orl_cols > 7) {
         return false
     }
     set_focus("cancel", focus_rows, focus_cols);
@@ -701,9 +701,9 @@ function drop() {
                             is_line_draw[j] = 1;
                             if (is_do[i][j] < list_need[j]) is_do[i][j] += DROP_PIXEL;
                             for (var k = 0; k < parseInt(list_max[j] / BLOCK_WIDTH); k++)
-                                if (list[j][k] > 0){
+                                if (list[j][k] > 0) {
                                     shape(list[j][k], j * BLOCK_WIDTH, is_do[i][j] - (k + 1) * BLOCK_WIDTH, 1)
-                                } 
+                                }
                         }
             max_drop -= DROP_PIXEL;
         } else {
@@ -732,7 +732,7 @@ function drop() {
                         }
                     }
                 }
-             check_blast(-1, -1, -1, -1, -1, -1, false);
+            check_blast(-1, -1, -1, -1, -1, -1, false);
             check_over();
         }
     },
@@ -844,8 +844,8 @@ function shape(type, x, y, scale) {
     ctx.globalCompositeOperation = "source-over";
     var img = new Image();
     img.src = "svg/" + imgname[type - 1] + ".png";
-    var fakeBLOCK_WIDTH = 2*BLOCK_WIDTH;
-    var fakeBLOCK_HEIGHT = 2*BLOCK_HEIGHT;
+    var fakeBLOCK_WIDTH = 2 * BLOCK_WIDTH;
+    var fakeBLOCK_HEIGHT = 2 * BLOCK_HEIGHT;
     if (img.complete) {
         ctx.drawImage(img, x * scale, y * scale, BLOCK_WIDTH * scale, BLOCK_HEIGHT * scale);
     } else {
@@ -913,7 +913,7 @@ function mouse_up(event) {
 }
 
 function set_focus(mode, rows, cols) {
-    if(rows<0 || rows >7  || cols<0 || cols >7 ){
+    if (rows < 0 || rows > 7 || cols < 0 || cols > 7) {
         return false
     }
     var this_x = cols * BLOCK_WIDTH;
@@ -969,115 +969,115 @@ function gameover(score, all_sum, one_sum, type) {
         is_time = false;
     }
     var compareArr = []
-    for(var a= 0;a<nowfilter.length;a++){
-        compareArr.push(allKindScore.map(item =>{
-           return item.name == nowfilter[a].name ? {...item,expect:nowfilter[a].value}  : {name:'needcancel'}
+    for (var a = 0; a < nowfilter.length; a++) {
+        compareArr.push(allKindScore.map(item => {
+            return item.name == nowfilter[a].name ? { ...item, expect: nowfilter[a].value } : { name: 'needcancel' }
         }))
     }
-    for(var b = 0;b<compareArr.length;b++){
-        compareArr[b] = compareArr[b].filter(item =>{
+    for (var b = 0; b < compareArr.length; b++) {
+        compareArr[b] = compareArr[b].filter(item => {
             return item.name != 'needcancel'
         })
     }
-    var compareResult = compareArr.map(item =>{
+    var compareResult = compareArr.map(item => {
         return item[0].value - item[0].expect
     })
     function check(number) {
         return number >= 0;
     }
     var whtherPass = compareResult.every(check)
-    if(whtherPass){
-        var ssnumber = passnumber+1 ;
-        var sss = './png/pass'+ssnumber+'.png'
-        if(ssnumber<11){
-             preloadTheImg(sss)
+    if (whtherPass) {
+        var ssnumber = passnumber + 1;
+        var sss = './png/pass' + ssnumber + '.png'
+        if (ssnumber < 11) {
+            preloadTheImg(sss)
         }
-       
-        if(ssnumber == 10){
-             preloadTheImg('./png/success.png');
-         }
-        if(passnumber<=Object.keys(nowFilters).length-1){
-            var needimg = './png/pass'+passnumber+'.png';
+
+        if (ssnumber == 10) {
+            preloadTheImg('./png/success.png');
+        }
+        if (passnumber <= Object.keys(nowFilters).length - 1) {
+            var needimg = './png/pass' + passnumber + '.png';
             $('.game_pass_img').attr("src", needimg);
-            $('.game_pass_img').css('display','block');
-            $('.next_pass_button_area').css('z-index',12);
-            $('.next_pass_button').css('display','block');
-            passnumber+=1;
-            if(passnumber>=7){
-                imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap","virus"];  //方块集合
+            $('.game_pass_img').css('display', 'block');
+            $('.next_pass_button_area').css('z-index', 12);
+            $('.next_pass_button').css('display', 'block');
+            passnumber += 1;
+            if (passnumber >= 7) {
+                imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap", "virus"];  //方块集合
                 BLOCK_TYPE = 7
             }
-            nowpass = 'Checkpoint'+passnumber;
+            nowpass = 'Checkpoint' + passnumber;
             var nextPassTime = nowFilters[nowpass].time;
             ALLTIME = nextPassTime;
-        }else{
+        } else {
             saveScore()
             var needimg = './png/success.png';
             $('.game_pass_img').attr("src", needimg);
-            $('.game_pass_img').css('display','block');
-            $('.next_pass_button_area').css('display','none');
-            $('.next_pass_button_area_success').css('z-index',12);
-            $('.next_pass_button_area_success').css('display','block');
-            $('.next_pass_button_area_success').css('display','flex');
-            setTimeout(function(){
-                   $('.towin_game_button').css('display','block');
-            },15)
-        
-         
+            $('.game_pass_img').css('display', 'block');
+            $('.next_pass_button_area').css('display', 'none');
+            $('.next_pass_button_area_success').css('z-index', 12);
+            $('.next_pass_button_area_success').css('display', 'block');
+            $('.next_pass_button_area_success').css('display', 'flex');
+            setTimeout(function () {
+                $('.towin_game_button').css('display', 'block');
+            }, 15)
+
+
 
         }
-    }else{
+    } else {
         var needimg = './png/pass_fail.png';
         $('.game_pass_img').attr("src", needimg);
-        $('.game_pass_img').css('display','block');
-        $('.next_pass_button_area').css('z-index',12);
-        $('.restart_game_button').css('display','block');
+        $('.game_pass_img').css('display', 'block');
+        $('.next_pass_button_area').css('z-index', 12);
+        $('.restart_game_button').css('display', 'block');
     }
 
-    
+
 
 };
 
-function toWin(){
+function toWin() {
     window.location = 'https://www.wenjuan.com/s/UBBz6bV/'
 }
 
 
 
-function toRank(){
+function toRank() {
     getRank()
-    $('.game_pass_img_rank').css('display','block');
-    $('.game_pass_img_rank').css('display','flex');
-    $('.game_pass_img_rank').css('justify-content','center');
-    $('.game_pass_img_rank').css('align-items','center');
+    $('.game_pass_img_rank').css('display', 'block');
+    $('.game_pass_img_rank').css('display', 'flex');
+    $('.game_pass_img_rank').css('justify-content', 'center');
+    $('.game_pass_img_rank').css('align-items', 'center');
 }
 
-function hideRank(){
-    $('.game_pass_img_rank').css('display','none');
+function hideRank() {
+    $('.game_pass_img_rank').css('display', 'none');
 }
 
 
 
-function   getCode () { // 非静默授权，第一次有弹框
+function getCode() { // 非静默授权，第一次有弹框
     var code = ''
     var local = window.location.href // 获取页面url
-    var appid = 'wxd380519f6d1d8516' 
+    var appid = 'wxd380519f6d1d8516'
     code = getUrlCode().code // 截取code;
     if (code == null || code === '') { // 如果没有code，则去请求
-        window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd380519f6d1d8516&redirect_uri=http://sss.hemajia.net/duiduipeng/index.html&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect`
+        window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd380519f6d1d8516&redirect_uri=https://sss.hemajia.net/duiduipeng&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect`
     } else {
         // 处理code
-          localStorage.setItem('nowCode1',code);
-          console.log(typeof code,222222222222 )
-          var info ={
-            'code':code,
+        localStorage.setItem('nowCode1', code);
+        console.log(typeof code, 222222222222)
+        var info = {
+            'code': code,
         };
-          $.ajax({
-            url: 'http://192.168.3.11:8088/jk/user/oauth2',
+        $.ajax({
+            url: 'https://sss.hemajia.net/jk/user/oauth2',
             type: "post",
-            contentType:'application/json',
-            data:  JSON.stringify(info),
-            dataType:'json',
+            contentType: 'application/json',
+            data: JSON.stringify(info),
+            dataType: 'json',
             success: function (res) {
                 wxName = res.data.nickname;
                 wxAvatar = res.data.headimgurl;
@@ -1086,50 +1086,50 @@ function   getCode () { // 非静默授权，第一次有弹框
         })
     }
 
-} 
+}
 
-function    getUrlCode() { // 截取url中的code方法
+function getUrlCode() { // 截取url中的code方法
     var nnn = window.location.href;
     //var nnn = 'http://sss.hemajia.net/duiduipeng/index.html?code=031cPn0005u2zK18wo100peLqE4cPn08&state=STATE';
-    var url =  nnn;
+    var url = nnn;
     var winUrl = url
     var theRequest = new Object()
     if (url.indexOf("?") != -1) {
         var str = url.substr(1)
         var strs = str.split("&")
         var newarr = [];
-        for(let j=0;j < strs.length; j ++){
-            if(strs[j].indexOf("?") != -1){
-               var index =  strs[j].lastIndexOf("?")
+        for (let j = 0; j < strs.length; j++) {
+            if (strs[j].indexOf("?") != -1) {
+                var index = strs[j].lastIndexOf("?")
                 newarr.push(strs[j].substring(index + 1, strs[j].length))
-            }else{
+            } else {
                 newarr.push(strs[j])
             }
         }
 
-       
-        for(var i = 0; i < newarr.length; i ++) {
-            theRequest[newarr[i].split("=")[0]]=(newarr[i].split("=")[1])
+
+        for (var i = 0; i < newarr.length; i++) {
+            theRequest[newarr[i].split("=")[0]] = (newarr[i].split("=")[1])
         }
     }
     return theRequest
-    
+
 }
 
 //获取排行榜
-function getRank(){
+function getRank() {
     $.ajax({
-        url: 'http://192.168.3.11:8088/jk/user/list',
+        url: 'https://sss.hemajia.net/jk/user/list',
         type: "post",
-        data:'{}',
-        contentType:'application/json',
+        data: '{}',
+        contentType: 'application/json',
         success: function (res) {
             rankList = res.data
-            var topTen = rankList.slice(0,10);
-            for(let i= 0;i<topTen.length;i++){
-                var nowitem_avatar = '#rank_avatar'+(i+1);
-                var nowitem_name = '#rank_name'+(i+1);
-                var nowitem_score = '#rank_score'+(i+1);
+            var topTen = rankList.slice(0, 10);
+            for (let i = 0; i < topTen.length; i++) {
+                var nowitem_avatar = '#rank_avatar' + (i + 1);
+                var nowitem_name = '#rank_name' + (i + 1);
+                var nowitem_score = '#rank_score' + (i + 1);
                 $(nowitem_avatar).attr("src", topTen[i].headimgurl);
                 $(nowitem_name).html(topTen[i].nickname);
                 $(nowitem_score).html(topTen[i].integral);
@@ -1141,18 +1141,18 @@ function getRank(){
 
 
 //保存积分
-function saveScore(){
-    var info ={
-        "integral":JSON.stringify(SCORE),  //积分
-        "userid":userid    //用户id
+function saveScore() {
+    var info = {
+        "integral": JSON.stringify(SCORE),  //积分
+        "userid": userid    //用户id
     };
     $.ajax({
-        url: 'http://192.168.3.11:8088/jk/user/addByUserid',
+        url: 'https://sss.hemajia.net/jk/user/addByUserid',
         type: "post",
-        data:JSON.stringify(info),
-        contentType:'application/json',
+        data: JSON.stringify(info),
+        contentType: 'application/json',
         success: function (res) {
-          
+
 
         }
     })
@@ -1331,11 +1331,11 @@ function timerial(ttt) {
 }
 
 function starttime() {
-    if(ALLTIME-10>=0){
-        ALLTIME-=10;
+    if (ALLTIME - 10 >= 0) {
+        ALLTIME -= 10;
     }
-    $(".innter_time").html(ALLTIME/10+'s');
-    if (ALLTIME/10<= 0) {
+    $(".innter_time").html(ALLTIME / 10 + 's');
+    if (ALLTIME / 10 <= 0) {
         mybeta = 0;
         clearInterval(t1);
         is_time = false;
@@ -1374,18 +1374,18 @@ function countDown() {
 }
 
 
-function changeRuleShow(value){
-    value == true ? $('.black_rule_explain').css('display','block')  :  $('.black_rule_explain').css('display','none');
-}  
+function changeRuleShow(value) {
+    value == true ? $('.black_rule_explain').css('display', 'block') : $('.black_rule_explain').css('display', 'none');
+}
 
 
 window.onload = function () {
-   var  imageObj = new Image(); 
-   $(".innter_time").html(ALLTIME/10+'s');
+    var imageObj = new Image();
+    $(".innter_time").html(ALLTIME / 10 + 's');
     imageObj.src = './png/index.png';
-    imageObj.onload = function(){
-        $('.pre_load').css('display','none');
-        $('.start_index_img').css('display','block');
+    imageObj.onload = function () {
+        $('.pre_load').css('display', 'none');
+        $('.start_index_img').css('display', 'block');
     }
     preloadTheImg('./png/pass1.png');
     preloadTheImg('./png/pass_fail.png');
@@ -1393,73 +1393,73 @@ window.onload = function () {
 
 }
 
-function preloadTheImg(src){
-    var preimg = new Image();
-        preimg.src = src;
-        preimg.onload = function(){
-                
-     }
+function preloadTheImg(src) {
+    var preimg = new Image();
+    preimg.src = src;
+    preimg.onload = function () {
+
+    }
 }
 
-function getShare(){
+function getShare() {
     $.ajax({
-        url: 'http://sss.hemajia.net/ddp/share/getShareData',
+        url: 'https://sss.hemajia.net/ddp/share/getShareData',
         type: "post",
-        data:  {url:'http://sss.hemajia.net/duiduipeng/index.html'},
+        data: { url: 'https://sss.hemajia.net/duiduipeng/index.html' },
         dataType: "json",
         success: function (res) {
-             var timestamp = res.data.timestamp;
-             var nonceStr = res.data.nonceStr;
-             var signature = res.data.signature;
-               wx.config({
-          debug: false,
-          appId: 'wxd380519f6d1d8516',
-          timestamp: timestamp,
-          nonceStr: nonceStr,
-          signature: signature,
-          jsApiList: [
-          'onMenuShareAppMessage',  //旧的接口，即将废弃
-          'onMenuShareTimeline', //旧的接口，即将废弃
-        'updateAppMessageShareData',
-        'updateTimelineShareData'
+            var timestamp = res.data.timestamp;
+            var nonceStr = res.data.nonceStr;
+            var signature = res.data.signature;
+            wx.config({
+                debug: false,
+                appId: 'wxd380519f6d1d8516',
+                timestamp: timestamp,
+                nonceStr: nonceStr,
+                signature: signature,
+                jsApiList: [
+                    'onMenuShareAppMessage',  //旧的接口，即将废弃
+                    'onMenuShareTimeline', //旧的接口，即将废弃
+                    'updateAppMessageShareData',
+                    'updateTimelineShareData'
 
-      ]// 必填，需要使用的JS接口列表
-      });
-                    wx.ready(function () {
-              
-              var  shareUrl = 'http://sss.hemajia.net/duiduipeng/index.html'
-               var iconImg =  'http://duiduipeng.oss-cn-beijing.aliyuncs.com/e4ce20bdb9f87573b0598fbb1e864e5.png'
-               var iconText = '健康对对碰';
-                  wx.onMenuShareAppMessage({
+                ]// 必填，需要使用的JS接口列表
+            });
+            wx.ready(function () {
 
-                  title: '健康对对碰', // 分享标题
+                var shareUrl = 'https://sss.hemajia.net/duiduipeng/index.html'
+                var iconImg = 'http://duiduipeng.oss-cn-beijing.aliyuncs.com/e4ce20bdb9f87573b0598fbb1e864e5.png'
+                var iconText = '健康对对碰';
+                wx.onMenuShareAppMessage({
 
-                  desc: '对对碰闯关成功可以抽取红包~', // 分享描述
+                    title: '健康对对碰', // 分享标题
 
-                  link: shareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    desc: '对对碰闯关成功可以抽取红包~', // 分享描述
 
-                  imgUrl: iconImg, // 分享图标
+                    link: shareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
 
-                  type: '', // 分享类型,music、video或link，不填默认为link
+                    imgUrl: iconImg, // 分享图标
 
-                  dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    type: '', // 分享类型,music、video或link，不填默认为link
 
-                  success: function () {
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
 
-                  // 用户点击了分享后执行的回调函数
+                    success: function () {
 
-                  }
+                        // 用户点击了分享后执行的回调函数
 
-                  });
-                  wx.onMenuShareTimeline({
-                      title: '健康对对碰', // 分享标题
-                      link: shareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                      imgUrl: iconImg, // 分享图标
-                      success: function () {
-                      // 用户点击了分享后执行的回调函数
-                      }
-                  });
-          });
+                    }
+
+                });
+                wx.onMenuShareTimeline({
+                    title: '健康对对碰', // 分享标题
+                    link: shareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: iconImg, // 分享图标
+                    success: function () {
+                        // 用户点击了分享后执行的回调函数
+                    }
+                });
+            });
 
 
         }
@@ -1469,11 +1469,11 @@ function getShare(){
 
 
 
-function hideIndex(){
-    $('.start_index').css('display','none');
-    $('.sblack_rule_explain').css('display','none');
-    $('.start_index_btn_area').css('display','none');
-    $('.start_index_btn').css('display','none');
+function hideIndex() {
+    $('.start_index').css('display', 'none');
+    $('.sblack_rule_explain').css('display', 'none');
+    $('.start_index_btn_area').css('display', 'none');
+    $('.start_index_btn').css('display', 'none');
     timerial(ALLTIME);
 }
 
