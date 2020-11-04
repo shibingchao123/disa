@@ -1402,10 +1402,11 @@ function preloadTheImg(src) {
 }
 
 function getShare() {
+    var nowurl = window.location.href;
     $.ajax({
         url: 'https://sss.hemajia.net/ddp/share/getShareData',
         type: "post",
-        data: { url: 'https://sss.hemajia.net/duiduipeng/index.html' },
+        data: { url: nowurl },
         dataType: "json",
         success: function (res) {
             var timestamp = res.data.timestamp;
@@ -1426,9 +1427,11 @@ function getShare() {
                 ]// 必填，需要使用的JS接口列表
             });
             wx.ready(function () {
-
-                var shareUrl = 'https://sss.hemajia.net/duiduipeng/index.html'
-                var iconImg = 'http://duiduipeng.oss-cn-beijing.aliyuncs.com/e4ce20bdb9f87573b0598fbb1e864e5.png'
+                // var str = window.location.href;
+                // str = str.match(/(\S*)code/)[1];
+                // var shareUrl =  str.slice(0,str.length-1) + 'index.html'
+                var shareUrl = window.location.href;
+                var iconImg = 'https://duiduipeng.oss-cn-beijing.aliyuncs.com/e4ce20bdb9f87573b0598fbb1e864e5.png'
                 var iconText = '健康对对碰';
                 wx.onMenuShareAppMessage({
 
