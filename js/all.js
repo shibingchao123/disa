@@ -113,6 +113,9 @@ function start(passtime) {
     // ALL_SUM = 0;
     // ONE_SUM = 0;
     ALLTIME = passtime;
+    var cardimg = './png/card'+passnumber+'.png';
+    $('.top_function_center_center_img').attr("src", cardimg);
+
 
     allKindScore = [
         { name: "disinfectant", value: 0, type: 1 },
@@ -1039,7 +1042,7 @@ function gameover(score, all_sum, one_sum, type) {
 };
 
 function toWin() {
-    window.location = 'https://www.wenjuan.com/s/UBBz6bV/'
+    window.location = 'https://www.wenjuan.com/s/VRFr6zt/'
 }
 
 
@@ -1479,6 +1482,10 @@ function hideIndex() {
     $('.start_index_btn').css('display', 'none');
     timerial(ALLTIME);
 }
+
+
+
+
 
 
 
