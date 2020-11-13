@@ -14,7 +14,7 @@ var nowFilters = {
     Checkpoint1: { condition: [{ name: "mask", value: 3, type: 5 }], time: 250 },
     Checkpoint2: { condition: [{ name: "soap", value: 4, type: 6 }], time: 300 },
     Checkpoint3: { condition: [{ name: "gloves", value: 6, type: 2 }], time: 300 },
-    Checkpoint4: { condition: [{ name: "Syringe", value: 7, type: 4 }], time: 500 },
+    Checkpoint4: { condition: [{ name: "Syringe", value: 6, type: 4 }], time: 500 },
     Checkpoint5: { condition: [{ name: "mask", value: 6, type: 5 }, { name: "soap", value: 3, type: 6 }], time: 600 },
     Checkpoint6: { condition: [{ name: "disinfectant", value: 6, type: 1 }, { name: "plastic", value: 6, type: 3 }], time: 600 },
     Checkpoint7: { condition: [{ name: "mask", value: 7, type: 5 }], time: 600 },
@@ -80,6 +80,8 @@ var wxName = '';
 var wxAvatar = '';
 var userid = '0';
 var rankList = [];
+var nowProbability = 0;
+var isWin = 2;
 
 
 if (localStorage.getItem("count") == null) {
@@ -182,6 +184,7 @@ function renderCondition() {
 }
 
 function beginFromOne() {
+    $('.towin_game_button_but_fail').css('display', 'none');
     imgname = ["disinfectant", "gloves", "plastic", "Syringe", "mask", "soap"];
     BLOCK_TYPE = 6
     hidePassBg();
@@ -1014,7 +1017,7 @@ function gameover(score, all_sum, one_sum, type) {
             var nextPassTime = nowFilters[nowpass].time;
             ALLTIME = nextPassTime;
         } else {
-            saveScore()
+            saveScore();
             var needimg = './png/success.png';
             $('.game_pass_img').attr("src", needimg);
             $('.game_pass_img').css('display', 'block');
@@ -1030,11 +1033,15 @@ function gameover(score, all_sum, one_sum, type) {
 
         }
     } else {
+        if(passnumber>=6){
+            $('.towin_game_button_but_fail').css('display', 'block');
+        }
         var needimg = './png/pass_fail.png';
         $('.game_pass_img').attr("src", needimg);
         $('.game_pass_img').css('display', 'block');
         $('.next_pass_button_area').css('z-index', 12);
         $('.restart_game_button').css('display', 'block');
+        
     }
 
 
@@ -1042,10 +1049,170 @@ function gameover(score, all_sum, one_sum, type) {
 };
 
 function toWin() {
-    window.location = 'https://www.wenjuan.com/s/VRFr6zt/'
+    //window.location = 'https://www.wenjuan.com/s/VRFr6zt/'
+
+    if(canForturn){
+        fortureResult()
+    }else{
+        var willimg = './png/only_one_chance.png';
+        $('.fail_money_area').css('display', 'block');
+        $('.fail_money_area').css('z-index', 999999999999999999999999999);
+        setTimeout(function(){
+            $('.fail_money_area_img').attr("src", willimg);
+            $('.fail_money_area_img').css('display', 'block');
+        },50)
+    }
 }
 
 
+
+function  cllbackPassimg(){
+    $('.fail_money_area').css('display', 'none');
+    $('.success_money_area').css('display', 'none');
+}
+
+
+
+function validatePhone(){
+    var phone = document.getElementById("success_money_area_bg_fake_input").value
+    if(!(/^1[3|4|5|7|8][0-9]{9}$/.test(phone))){ 
+        alert("手机号码有误，请重填");  
+        return false; 
+    }else{
+        return true
+    }
+    
+}
+
+
+function getWInMoney(){
+    $.ajax({
+        url: 'https://sss.hemajia.net/jk/user/oauth2',
+        type: "post",
+        contentType: 'application/json',
+        data: JSON.stringify(info),
+        dataType: 'json',
+        success: function (res) {
+            wxName = res.data.nickname;
+            wxAvatar = res.data.headimgurl;
+            userid = res.data.userid
+        }
+    })
+    
+}
+
+
+function getprobability(){
+    $.ajax({
+        url: 'https://sss.hemajia.net/jk/user/selectByGailv  ',
+        type: "post",
+        data:'',
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function (res) {
+            nowProbability = res.data[0].zjglv;
+        }
+    })
+}
+
+
+function fortureResult(){
+    var wheprobability = nowProbability/100;
+    if(Math.random()<=wheprobability){
+        isWin = 1;
+        var willimg = './png/no_change.png';
+        $('.success_money_area').css('display', 'block');
+        $('.success_money_area').css('z-index', 999999999999999999999999999); 
+        canForturn = false;
+        var info = {
+            'openid': userid,
+            'phone':'',
+            isWin,
+        }
+        $.ajax({
+            url: 'https://sss.hemajia.net/jk/user/insert',
+            type: "post",
+            data:info,
+            contentType:  'application/x-www-form-urlencoded;charset=UTF-8' ,
+            dataType: 'json',
+            success: function (res) {
+                
+            }
+        })
+    }else{
+        isWin = 2;
+        var willimg = './png/no_change.png';
+        $('.fail_money_area').css('display', 'block');
+        $('.fail_money_area').css('z-index', 999999999999999999999999999);
+        var info = {
+            'openid': userid,
+            'phone':'',
+            isWin,
+        }
+        $.ajax({
+            url: 'https://sss.hemajia.net/jk/user/insert',
+            type: "post",
+            data:info,
+            contentType:  'application/x-www-form-urlencoded;charset=UTF-8' ,
+            dataType: 'json',
+            success: function (res) {
+                
+            }
+        })
+        setTimeout(function(){
+            $('.fail_money_area_img').attr("src", willimg);
+            $('.fail_money_area_img').css('display', 'block');
+            canForturn = false
+        },50)
+    }
+
+}
+
+function searchFirst(){
+    var whether =  localStorage.getItem("nowCode1");
+    var info = {
+        'openid': userid,
+    };
+    $.ajax({
+        url: 'https://sss.hemajia.net/jk/user/checkByOpenid',
+        type: "post",
+        data:JSON.stringify(info),
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function (res) {
+            canForturn = res.flag;
+        }
+    })
+   
+}
+
+
+function saveFortureInfo(){
+    var whether =  localStorage.getItem("nowCode1");
+    var phone1 = document.getElementById("success_money_area_bg_fake_input").value;
+    if(!(/^1[3|4|5|7|8][0-9]{9}$/.test(phone1))){ 
+        alert("手机号码有误，请重填");  
+        return false; 
+    }
+    var info = {
+        'openid': userid,
+        'phone':phone1,
+        isWin,
+    }
+    $.ajax({
+        url: 'https://sss.hemajia.net/jk/user/insert',
+        type: "post",
+        data:info,
+        contentType:  'application/x-www-form-urlencoded;charset=UTF-8' ,
+        dataType: 'json',
+        success: function (res) {
+            if(res.flag){
+                alert('领取成功，后续工作人员将为您充值');
+                cllbackPassimg();
+            }
+        }
+    })
+}
 
 function toRank() {
     getRank()

@@ -17,6 +17,70 @@ html, body {
     height:100vh;
     position: relative;
 }
+.fail_money_area{
+    width:100%;
+    z-index: 9999999999999999999999999999999999999999999999999999;
+    display: none;
+    height:100vh;
+    position: absolute;
+    left:0;
+    top:0;
+}
+.success_money_area{
+    width:100%;
+    z-index: 98;
+    height:100vh;
+    display: none;
+    position: absolute;
+    left:0;
+    top:0;
+}
+.success_money_area_bg{
+    width:100%;
+    z-index: 9999999999999999999999999999999999999999999999999999;
+    height:100vh;
+    position: absolute;
+    left:0;
+    top:0;
+}
+.success_money_area_bg_fake{
+    position: absolute;
+    width:309px;
+    height:344px;
+    left:50%;
+    top:50%;
+    margin-left:-155px;
+    margin-top:-172px;
+    z-index: 99999999999;
+    background:url('../png/chance_area.png') no-repeat center;
+    background-size: cover;
+}
+.success_money_area_bg_fake_input{
+    position: absolute;
+    left:50%;
+    top:110px;
+    margin-left:-97px;
+    width: 194px;
+    height:20px;
+    background:white;
+}
+.success_money_area_bg_fake_btn{
+    position: absolute;
+    left:50%;
+   bottom:70px;
+    margin-left:-106px;
+    width: 212px;
+    height:61px;
+}
+.fail_money_area_img{
+    width:100%;
+    z-index: 97;
+    height:100vh;
+    display: none;
+    position: absolute;
+    left:0;
+    top:0;
+}
 .start_index{
     width:100%;
     z-index: 99;
@@ -93,7 +157,7 @@ html, body {
     left:0;
     display: none;
     top:0;
-    z-index: 99999999999999999999;
+    z-index: 999;
 }
 .game_pass_img_rank_img_area{
     width:320px;
@@ -186,6 +250,12 @@ html, body {
 .towin_game_button{
     width:125px;
     height:40px;
+    display: none;
+}
+.towin_game_button_but_fail{
+    width:125px;
+    height:40px;
+    margin-left:20px;
     display: none;
 }
 .top_function_area{

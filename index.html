@@ -20,6 +20,20 @@
      </div> 
      <!-- 总背景区域开始 -->
      <div  class='all_bg' >
+       <!--中奖开始  -->
+      <div class='success_money_area'  >
+        <img src="./png/have_change_bg.png"    class='success_money_area_bg' >
+        <div class='success_money_area_bg_fake' >
+         <input type="text"   class='success_money_area_bg_fake_input' id='success_money_area_bg_fake_input'  >
+         <img src="./png/get_btn.png"   onclick="saveFortureInfo()"   class='success_money_area_bg_fake_btn'>
+        </div>
+      </div>
+       <!-- 中奖结束 -->
+       <!-- 没中奖开始 -->
+      <div class='fail_money_area' >
+        <img src="./png/no_change.png"   onclick="cllbackPassimg()"  class='fail_money_area_img'  >
+      </div>
+       <!-- 没中奖结束 -->
        <!--  首页开始页面开始-->
        <div  class='start_index' >
          <div  class='pre_load' >加载图片中，请稍后...</div>
@@ -118,7 +132,7 @@
       <div  class='next_pass_button_area' >
          <img src="./png/next_btn.png"   onclick="start(ALLTIME)"  class='next_pass_button'  >
          <img src="./png/re_start.png"   onclick="beginFromOne()"  class='restart_game_button'  >
-         <!-- <img src="./png/lottery.png"   onclick="toWin()"  class='towin_game_button'  > -->
+         <img src="./png/lottery.png"   onclick="toWin()"  class='towin_game_button_but_fail'  >
       </div>
       <div  class='next_pass_button_area_success' >
         <img src="./png/lottery.png"   onclick="toWin()"  class='towin_game_button'  >
@@ -213,6 +227,14 @@
             }, false); 
         },10)
     });
+
+    getprobability()
+
+
+    setTimeout(() => {
+       searchFirst()
+    }, 15000);
+   
 
 
 
