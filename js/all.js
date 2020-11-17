@@ -468,6 +468,40 @@ function check_blast(obj_rows, obj_cols, obj_type, orl_rows, orl_cols, orl_type,
                     allKindScore = allKindScore.map(item => {
                         return item.type == block[array_rows[m]][array_cols[m]] ? { ...item, value: item.value + 1 } : item
                     })
+                    if(nowFilters[nowpass].condition.length == 1){
+                        var exactNumber = allKindScore.filter(item =>{
+                           return  item.type == nowFilters[nowpass].condition[0].type
+                        })
+                        var nowNumber =  nowFilters[nowpass].condition[0].value- exactNumber[0].value
+                        if(nowNumber <=0){
+                            var needRender1 = 0;
+                        }else{
+                            var needRender1 = nowNumber;
+                        }
+                        $(".top_function_center_bottom_condition_text").html('x'+needRender1);
+                    }else{
+                        var exactNumber1 = allKindScore.filter(item =>{
+                            return  item.type == nowFilters[nowpass].condition[0].type
+                         })
+                         var exactNumber2 = allKindScore.filter(item =>{
+                            return  item.type == nowFilters[nowpass].condition[1].type
+                         })
+                         var nowNumber1 =  nowFilters[nowpass].condition[0].value- exactNumber1[0].value;
+                         var nowNumber2 =  nowFilters[nowpass].condition[1].value- exactNumber2[0].value
+                         if(nowNumber1 <=0){
+                             var needRender2 = 0;
+                         }else{
+                             var needRender2 = nowNumber1;
+                         }
+                         if(nowNumber2 <=0){
+                            var needRender3 = 0;
+                        }else{
+                            var needRender3 = nowNumber2;
+                        }
+                        $(".top_function_center_bottom_condition_text2").html('x'+needRender2);
+                        $(".top_function_center_bottom_condition_text3").html('x'+needRender3);
+                    }
+                   
                     block[array_rows[m]][array_cols[m]] = 0;
                     ctx.clearRect(array_cols[m] * BLOCK_WIDTH, array_rows[m] * BLOCK_WIDTH, BLOCK_HEIGHT, BLOCK_WIDTH);
                 }
@@ -1117,54 +1151,72 @@ function getprobability(){
 
 
 function fortureResult(){
-    var wheprobability = nowProbability/100;
-    if(Math.random()<=wheprobability){
-        isWin = 1;
-        var willimg = './png/no_change.png';
-        $('.success_money_area').css('display', 'block');
-        $('.success_money_area').css('z-index', 999999999999999999999999999); 
-        canForturn = false;
-        var info = {
-            'openid': userid,
-            'phone':'',
-            isWin,
-        }
-        $.ajax({
-            url: 'https://sss.hemajia.net/jk/user/insert',
-            type: "post",
-            data:info,
-            contentType:  'application/x-www-form-urlencoded;charset=UTF-8' ,
-            dataType: 'json',
-            success: function (res) {
-                
+    $.ajax({
+        url: 'https://sss.hemajia.net/jk/user/selectByGailv',
+        type: "post",
+        data:'',
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function (res) {
+            nowProbability = res.data[0].zjglv;
+            var wheprobability = nowProbability/100;
+            if(Math.random()<=wheprobability){
+                isWin = 1;
+                var willimg = './png/no_change.png';
+                $('.success_money_area').css('display', 'block');
+                $('.success_money_area').css('z-index', 999999999999999999999999999); 
+                canForturn = false;
+                var info = {
+                    'openid': userid,
+                    'phone':'',
+                    isWin,
+                }
+                $.ajax({
+                    url: 'https://sss.hemajia.net/jk/user/insert',
+                    type: "post",
+                    data:info,
+                    contentType:  'application/x-www-form-urlencoded;charset=UTF-8' ,
+                    dataType: 'json',
+                    success: function (res) {
+                        
+                    }
+                })
+            }else{
+                isWin = 2;
+                var willimg = './png/no_change.png';
+                $('.fail_money_area').css('display', 'block');
+                $('.fail_money_area').css('z-index', 999999999999999999999999999);
+                var info = {
+                    'openid': userid,
+                    'phone':'',
+                    isWin,
+                }
+                $.ajax({
+                    url: 'https://sss.hemajia.net/jk/user/insert',
+                    type: "post",
+                    data:info,
+                    contentType:  'application/x-www-form-urlencoded;charset=UTF-8' ,
+                    dataType: 'json',
+                    success: function (res) {
+                        
+                    }
+                })
+                setTimeout(function(){
+                    $('.fail_money_area_img').attr("src", willimg);
+                    $('.fail_money_area_img').css('display', 'block');
+                    canForturn = false
+                },50)
             }
-        })
-    }else{
-        isWin = 2;
-        var willimg = './png/no_change.png';
-        $('.fail_money_area').css('display', 'block');
-        $('.fail_money_area').css('z-index', 999999999999999999999999999);
-        var info = {
-            'openid': userid,
-            'phone':'',
-            isWin,
+
+
+
+
+
+
+
         }
-        $.ajax({
-            url: 'https://sss.hemajia.net/jk/user/insert',
-            type: "post",
-            data:info,
-            contentType:  'application/x-www-form-urlencoded;charset=UTF-8' ,
-            dataType: 'json',
-            success: function (res) {
-                
-            }
-        })
-        setTimeout(function(){
-            $('.fail_money_area_img').attr("src", willimg);
-            $('.fail_money_area_img').css('display', 'block');
-            canForturn = false
-        },50)
-    }
+    })
+
 
 }
 
@@ -1607,7 +1659,7 @@ function getShare() {
 
                     title: '健康对对碰', // 分享标题
 
-                    desc: '对对碰闯关成功可以抽取红包~', // 分享描述
+                    desc: '对对碰闯关成功可以抽取话费~', // 分享描述
 
                     link: shareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
 
